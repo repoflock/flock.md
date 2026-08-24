@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.1 · profile: flow
+> flock: 0.2 · profile: flow
 
 ## Docs Map
 
@@ -26,9 +26,9 @@
 
 ## Index
 
-[docs/ROADMAP.md](docs/ROADMAP.md) — one line per feature: name · priority ·
-status label with date · link to the feature doc. Detail lives in the docs, never in
-the index.
+[docs/ROADMAP.md](docs/ROADMAP.md) — one line per feature, machine-writable
+([spec §3.3](../../spec/SPEC.md#33-machine-writable-index-new-in-02)):
+`| Item | Target | Status | Docs |`. Detail lives in the docs, never in the index.
 
 ## Status Labels
 

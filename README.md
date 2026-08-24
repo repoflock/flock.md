@@ -2,7 +2,9 @@
 
 > One file that tells humans **and** AI agents where a repo's knowledge lives — and how work flows through it.
 
-**Status: v0.1 — draft.** The spec is small on purpose and still settling. Feedback is welcome via issues.
+**Status: v0.2 — draft.** The spec is small on purpose and still settling. v0.2 adds
+document templates and an opt-in machine-writable index — tool-friendly, never
+tool-required. Feedback is welcome via issues.
 
 ## The problem
 

@@ -1,6 +1,6 @@
 # The Flock Standard — Specification
 
-**Version 0.1.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
+**Version 0.2.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
 spec is still evolving and minor versions may break.
 
 The key words MUST, SHOULD, and MAY are to be interpreted as described in
@@ -16,7 +16,7 @@ The key words MUST, SHOULD, and MAY are to be interpreted as described in
 
   ```markdown
   # FLOCK.md
-  > flock: 0.1 · profile: core
+  > flock: 0.2 · profile: core
   ```
 
 - Paths in `FLOCK.md` are relative to the repository root.
@@ -89,6 +89,66 @@ Rules:
   something observable from outside the code.
 - One `brd` MAY cover several `feature` documents.
 
+### 3.1 Document label block *(new in 0.2)*
+
+Each flow document SHOULD open with a label block: bold labels, one per line, directly
+under the H1 title. Recognized labels:
+
+| Label | In | Meaning |
+|---|---|---|
+| `**Status:**` | all three kinds | A declared status label (§2.3), optionally with a date |
+| `**Target:**` | feature | The version or milestone the work currently aims at *(optional)* |
+| `**Feature:**` | blueprint, worklog | Link back to the feature document |
+| `**Blueprint:**` / `**Worklog:**` | feature | Links completing three-way linking; `—` until the file exists |
+
+A document MAY carry additional labels. A tool MUST ignore labels it does not recognize,
+and MUST NOT remove them.
+
+### 3.2 Templates *(new in 0.2)*
+
+Starter skeletons for the three kinds live in [`templates/`](templates/):
+[`FEATURE.md`](templates/FEATURE.md) · [`BLUEPRINT.md`](templates/BLUEPRINT.md) ·
+[`WORKLOG.md`](templates/WORKLOG.md). `<angle-bracket>` spans are placeholders.
+
+A tool that scaffolds flow documents SHOULD start from these templates. The templates
+define the skeleton — headings, label block, the questions each section answers — not
+the prose; a repo MAY extend them, and existing documents that grew organically are not
+made non-conforming by them.
+
+### 3.3 Machine-writable index *(new in 0.2)*
+
+An index MAY be machine-writable: a GFM table whose header row is exactly
+
+```markdown
+| Item | Target | Status | Docs |
+```
+
+(the `Target` column MAY be omitted, giving `| Item | Status | Docs |`), with one row
+per item:
+
+- **Item** — name plus at most one clause saying what it is.
+- **Target** — the version or milestone aimed at, matching the feature's `**Target:**`.
+- **Status** — a declared status label (§2.3), optionally with a date.
+- **Docs** — link(s), at minimum to the feature document.
+
+A tool adding an item appends one row to this table and updates the row's Status when
+the document's Status changes. If the index contains no such table, the tool MUST NOT
+guess where to write — it SHOULD hand the formatted row to a human to place. A richer,
+hand-maintained index is still conforming; machine-writability is opt-in.
+
+### 3.4 Stage transitions *(new in 0.2)*
+
+Two transitions are common enough to name, so tools can offer them:
+
+- **Open** *(nothing → `Design`)*: create the feature document from its template and add
+  an index row.
+- **Advance** *(`Design` → `Building`)*: create the blueprint and worklog from their
+  templates, complete the three-way links, and update Status in both the feature
+  document and the index.
+
+A tool performing either transition SHOULD leave the results as uncommitted changes for
+a human to review, and MUST NOT overwrite an existing file or commit on its own.
+
 ## 4. History conventions
 
 These rules apply to all profiles and are the heart of the standard: they keep a repo's
@@ -113,6 +173,8 @@ agents that will otherwise confidently re-litigate or refactor away decisions.
   delete or rewrite recorded decisions; they supersede them in place.
 - `FLOCK.md` complements `AGENTS.md`; it does not replace it. Repos with an `AGENTS.md`
   SHOULD reference `FLOCK.md` from it.
+- In a flow-profile repo, an agent opening or advancing work SHOULD use the §3.4
+  transitions and the §3.2 templates rather than inventing structure.
 
 ## 6. Conformance summary
 
@@ -120,5 +182,6 @@ agents that will otherwise confidently re-litigate or refactor away decisions.
 |---|---|
 | **Core** | `FLOCK.md` at root · Docs Map section |
 | **Flow** | Core, plus the §3 kind vocabulary and linking rules |
+| **Flow, machine-writable** *(opt-in)* | Flow, plus the §3.1 label block and a §3.3 index table |
 
 Everything not marked MUST is guidance: adopt what earns its keep.

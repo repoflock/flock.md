@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.1 · profile: core
+> flock: 0.2 · profile: core
 
 This repository hosts the Flock standard and follows it.
 
@@ -9,6 +9,7 @@ This repository hosts the Flock standard and follows it.
 | Type | Where | Answers |
 |---|---|---|
 | spec | [spec/SPEC.md](spec/SPEC.md) | What does a conforming repo look like? |
+| template | [spec/templates/](spec/templates/) | What skeleton does a new flow document start from? |
 | example | [examples/](examples/) | What does an adoption look like, minimal and full? |
 | overview | [README.md](README.md) | What is this and why does it exist? |
 | changelog | [CHANGELOG.md](CHANGELOG.md) | What changed between spec versions? |

@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.1 · profile: core
+> flock: 0.2 · profile: core
 
 ## Docs Map
 
