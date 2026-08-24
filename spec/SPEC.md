@@ -106,9 +106,11 @@ and MUST NOT remove them.
 
 ### 3.2 Templates *(new in 0.2)*
 
-Starter skeletons for the three kinds live in [`templates/`](templates/):
+Starter skeletons live in [`templates/`](templates/): the three document kinds —
 [`FEATURE.md`](templates/FEATURE.md) · [`BLUEPRINT.md`](templates/BLUEPRINT.md) ·
-[`WORKLOG.md`](templates/WORKLOG.md). `<angle-bracket>` spans are placeholders.
+[`WORKLOG.md`](templates/WORKLOG.md) — and the `FLOCK.md` entry point per profile —
+[`FLOCK_CORE.md`](templates/FLOCK_CORE.md) · [`FLOCK_FLOW.md`](templates/FLOCK_FLOW.md).
+`<angle-bracket>` spans are placeholders.
 
 A tool that scaffolds flow documents SHOULD start from these templates. The templates
 define the skeleton — headings, label block, the questions each section answers — not
@@ -138,8 +140,11 @@ hand-maintained index is still conforming; machine-writability is opt-in.
 
 ### 3.4 Stage transitions *(new in 0.2)*
 
-Two transitions are common enough to name, so tools can offer them:
+Three transitions are common enough to name, so tools can offer them:
 
+- **Adopt** *(no `FLOCK.md` → core or flow)*: create `FLOCK.md` at the repository root
+  from the matching profile template. For the flow profile, also create the index file
+  it references, seeded with the §3.3 table header — so Open has somewhere to write.
 - **Open** *(nothing → `Design`)*: create the feature document from its template and add
   an index row.
 - **Advance** *(`Design` → `Building`)*: create the blueprint and worklog from their

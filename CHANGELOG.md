@@ -14,9 +14,11 @@ adoptions remain conforming.
 - Machine-writable index, opt-in: a table headed `| Item | Target | Status | Docs |`
   (Target omissible); a tool appends rows there and must not guess when the table is
   absent (§3.3).
-- Named stage transitions **Open** (→ Design) and **Advance** (Design → Building) so
+- Named stage transitions **Adopt** (no `FLOCK.md` → core/flow, seeding the flow index
+  with the §3.3 header), **Open** (→ Design) and **Advance** (Design → Building) so
   tools can implement them; results stay uncommitted for human review, existing files
-  are never overwritten (§3.4).
+  are never overwritten (§3.4). `FLOCK.md` profile templates added alongside the
+  document templates (§3.2).
 - Agents: prefer transitions + templates over invented structure (§5).
 
 ## 0.1.0 — draft (unreleased)
