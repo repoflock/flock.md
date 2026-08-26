@@ -1,19 +1,22 @@
 # FLOCK.md
 
-> flock: 0.2 · profile: flow
+> flock: 0.3 · profile: flow
 
 ## Docs Map
 
 | Type | Where | Answers |
 |---|---|---|
+| brd | `docs/brd/` | Why is this worth building, for whom, measured how? |
 | feature | `docs/feature/` | What are we building, and what is the UX? |
-| blueprint | `docs/blueprints/` | How exactly will it be built? |
+| blueprint | `docs/blueprint/` | How exactly will it be built? |
 | worklog | `docs/worklog/` | What actually happened while building? |
 | index | [docs/ROADMAP.md](docs/ROADMAP.md) | What exists, in what state? |
 
 ## Lifecycle
 
-`feature` → `blueprint` → `worklog`, indexed in [docs/ROADMAP.md](docs/ROADMAP.md).
+**Why → What → How → What happened**: `brd` → `feature` → `blueprint` → `worklog`,
+indexed in [docs/ROADMAP.md](docs/ROADMAP.md). `brd` is optional — delete its row if
+unused.
 
 - A feature doc links to its blueprint and worklog; both link back (three-way linking).
 - A blueprint describes the code as measured, in rounds (`B1`, `B2`, …) that stand alone.

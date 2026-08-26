@@ -1,7 +1,7 @@
 # <Name> — Worklog
 
 **Feature:** [<NAME>.md](../feature/<NAME>.md)
-**Blueprint:** [<NAME>_BLUEPRINT.md](../blueprints/<NAME>_BLUEPRINT.md)
+**Blueprint:** [<NAME>_BLUEPRINT.md](../blueprint/<NAME>_BLUEPRINT.md)
 
 Append a block when a round of work closes — while it is fresh, not when the whole
 feature is done.

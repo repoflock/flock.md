@@ -3,6 +3,29 @@
 Spec versions follow [SemVer](https://semver.org). While in `0.x`, minor versions may
 change the spec incompatibly.
 
+## 0.3.0 — draft (unreleased)
+
+Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conforming.
+
+- Flow profile: the kind chain is framed as the **question chain** — **Why → What →
+  How → What happened** (`brd` → `feature` → `blueprint` → `worklog`), with the index
+  answering the fifth question, *where is everything, in what state?* (§3).
+- Typical locations normalized to singular, matching the kind vocabulary:
+  `docs/blueprints/` → `docs/blueprint/` (decided 2026-08-26). Locations are defaults,
+  not requirements — the Docs Map declares the actual path, so existing repos need not
+  rename.
+- Clarified that the flow profile fixes the lifecycle chain's vocabulary, not the
+  whole Docs Map: kinds outside the chain (`technical`, `business`, …) may be declared
+  as additional rows (§3).
+- Feature label block: optional `**Brd:**` label linking a feature to the brd it
+  descends from; the link is one-way, feature → brd, since one brd may cover several
+  features (§3.1).
+- Rejected (decided 2026-08-26): splitting the index into per-version files
+  (`docs/roadmap/1.1.md`, …). Version filtering is what the machine-writable index's
+  Target column is for, and a single declared index file is what lets a tool know
+  where to write (§3.3); per-release *planning documents* are a kind of their own,
+  declared as a Docs Map row, not a variant of the index.
+
 ## 0.2.0 — draft (unreleased)
 
 Theme: tool-friendly, never tool-required. Everything below is SHOULD/MAY; 0.1

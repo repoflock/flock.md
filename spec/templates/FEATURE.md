@@ -2,6 +2,7 @@
 
 **Status:** Design <YYYY-MM-DD>
 **Target:** <version or milestone — optional, delete if unused>
+**Brd:** <link to the brd this descends from — optional, delete if unused>
 **Blueprint:** —
 **Worklog:** —
 

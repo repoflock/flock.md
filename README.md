@@ -2,9 +2,10 @@
 
 > One file that tells humans **and** AI agents where a repo's knowledge lives — and how work flows through it.
 
-**Status: v0.2 — draft.** The spec is small on purpose and still settling. v0.2 adds
-document templates and an opt-in machine-writable index — tool-friendly, never
-tool-required. Feedback is welcome via issues.
+**Status: v0.3 — draft.** The spec is small on purpose and still settling. v0.3 names
+the question chain — **Why → What → How → What happened** — that the flow profile has
+always encoded; v0.2 added document templates and an opt-in machine-writable index —
+tool-friendly, never tool-required. Feedback is welcome via issues.
 
 ## The problem
 
@@ -31,6 +32,19 @@ A single markdown file, `FLOCK.md`, at the repository root. It declares:
 
 Plain GitHub-flavored Markdown. No schema, no tooling, no lock-in. A repo adopts the
 core profile in five minutes; readers and agents get a stable entry point forever.
+
+## The question chain
+
+In the full [flow profile](spec/SPEC.md#3-the-flow-profile), a unit of work is done
+when four questions have written answers, in order:
+
+> **Why?** → `brd` · **What?** → `feature` · **How?** → `blueprint` ·
+> **What happened?** → `worklog`
+
+The index answers the fifth — *where is everything, in what state?* — for every unit
+of work at once. Four questions, four documents, three-way linked. Documents outside
+the chain (technical notes, business docs) are welcome; they get their own Docs Map
+rows — the chain fixes the lifecycle, not the whole map.
 
 ## Quick start
 

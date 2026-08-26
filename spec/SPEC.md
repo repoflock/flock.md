@@ -1,6 +1,6 @@
 # The Flock Standard — Specification
 
-**Version 0.2.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
+**Version 0.3.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
 spec is still evolving and minor versions may break.
 
 The key words MUST, SHOULD, and MAY are to be interpreted as described in
@@ -16,7 +16,7 @@ The key words MUST, SHOULD, and MAY are to be interpreted as described in
 
   ```markdown
   # FLOCK.md
-  > flock: 0.2 · profile: core
+  > flock: 0.3 · profile: core
   ```
 
 - Paths in `FLOCK.md` are relative to the repository root.
@@ -65,16 +65,26 @@ A repo MAY declare its own vocabulary instead; declaring it is what matters.
 ## 3. The flow profile
 
 The flow profile is a superset of the core profile for projects that run a full
-design-to-delivery cycle. It fixes the **Type** vocabulary of the Docs Map to a chain of
-document kinds:
+design-to-delivery cycle. Its heart is the **question chain**:
 
-| Kind | Answers | Typical location |
-|---|---|---|
-| `brd` *(optional)* | Why is this worth building, for whom, and how is success measured? | `docs/brd/` |
-| `feature` | What are we building, and what is the user experience? | `docs/feature/` |
-| `blueprint` | How exactly will it be built? | `docs/blueprints/` |
-| `worklog` | What actually happened while building it? | `docs/worklog/` |
-| `index` | What exists, in what state? | `docs/ROADMAP.md` |
+> **Why → What → How → What happened.** Four questions, four documents, three-way
+> linked. A unit of work is done when all four have written answers; the index answers
+> the fifth — *where is everything, in what state?* — for every unit of work at once.
+
+The chain fixes the **Type** vocabulary of the lifecycle kinds:
+
+| Question | Kind | Answers | Typical location |
+|---|---|---|---|
+| **Why?** | `brd` *(optional)* | Why is this worth building, for whom, and how is success measured? | `docs/brd/` |
+| **What?** | `feature` | What are we building, and what is the user experience? | `docs/feature/` |
+| **How?** | `blueprint` | How exactly will it be built? | `docs/blueprint/` |
+| **What happened?** | `worklog` | What actually happened while building it? | `docs/worklog/` |
+| *Where?* | `index` | What exists, in what state? | `docs/ROADMAP.md` |
+
+The chain fixes the lifecycle, not the whole map: kinds outside the chain
+(`technical`, `business`, …) MAY be declared as additional Docs Map rows. Typical
+locations are defaults, not requirements — the Docs Map declares the actual path, so
+a repo already using, say, `docs/blueprints/` stays conforming without renaming.
 
 Rules:
 
@@ -87,7 +97,9 @@ Rules:
   deviations from the blueprint and decisions that emerged during the work.
 - A `feature` SHOULD state what is explicitly out of scope, and SHOULD define done as
   something observable from outside the code.
-- One `brd` MAY cover several `feature` documents.
+- One `brd` MAY cover several `feature` documents. A `feature` MAY link to the `brd`
+  it descends from via the `**Brd:**` label (§3.1); the link is one-way, feature → brd
+  — a brd is not required to enumerate its features.
 
 ### 3.1 Document label block *(new in 0.2)*
 
@@ -98,6 +110,7 @@ under the H1 title. Recognized labels:
 |---|---|---|
 | `**Status:**` | all three kinds | A declared status label (§2.3), optionally with a date |
 | `**Target:**` | feature | The version or milestone the work currently aims at *(optional)* |
+| `**Brd:**` | feature | Link to the brd this feature descends from *(optional, new in 0.3)* |
 | `**Feature:**` | blueprint, worklog | Link back to the feature document |
 | `**Blueprint:**` / `**Worklog:**` | feature | Links completing three-way linking; `—` until the file exists |
 
