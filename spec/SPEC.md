@@ -181,7 +181,29 @@ agents that will otherwise confidently re-litigate or refactor away decisions.
 - In a flow-profile repo, an agent opening or advancing work SHOULD use the §3.4
   transitions and the §3.2 templates rather than inventing structure.
 
-## 6. Conformance summary
+## 6. Version compatibility *(new in 0.2)*
+
+The declaration line names a spec version, and `0.x` minor versions may break. So
+tools and repositories will disagree about versions routinely, and the disagreement
+must be survivable rather than fatal.
+
+- A tool MUST NOT refuse a repository because its declared version differs from the
+  tool's own — including a version the tool has never heard of. `FLOCK.md` is
+  markdown; a reader that cannot use a section can still show it to a human.
+- A tool SHOULD keep reading adoptions of earlier `0.x` versions. Features that
+  depend on something a later version introduced degrade quietly on a repository
+  that predates it — the absence of a §3.3 index table in a 0.1 adoption is not an
+  error, it is a 0.1 adoption.
+- A tool that writes documents SHOULD say when it writes them in the shape of a
+  version other than the one the repository declares, so the difference is a choice
+  the user saw rather than a surprise found later in a diff.
+- A tool SHOULD treat an undeclared or unparseable version as "unknown" and behave
+  as it would for its own version, rather than guessing high or low.
+- Repositories are not expected to chase the spec. Bumping the declaration line is
+  something an adopter does when they adopt something new, not maintenance the
+  standard asks of them.
+
+## 7. Conformance summary
 
 | Level | Requirements |
 |---|---|

@@ -20,6 +20,9 @@ adoptions remain conforming.
   are never overwritten (§3.4). `FLOCK.md` profile templates added alongside the
   document templates (§3.2).
 - Agents: prefer transitions + templates over invented structure (§5).
+- Version compatibility (§6): a tool must not refuse a repository over a version
+  difference, should keep reading earlier `0.x` adoptions, and should say when it
+  writes documents shaped by a version the repository does not declare.
 
 ## 0.1.0 — draft (unreleased)
 
