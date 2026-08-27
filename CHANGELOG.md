@@ -51,6 +51,18 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   `Building` item has all three.
 - §3.4 wording: "either transition" → "any of these transitions" (three have been
   listed since 0.2).
+- §2.1: the **Where** cell SHOULD hold the path or glob alone — annotations belong in
+  **Answers**. Found by migrating a source repository (decided 2026-08-27): a
+  `(20 file)` count glued to the path made the consuming tool read a directory that
+  does not exist, and 20 feature documents silently parsed as zero.
+- README: Quick start gains a third path — migrating an established docs system, for
+  repositories whose conventions already live in an agent instruction file. Carries a
+  phased agent prompt (read-only dry run with baseline numbers → truth-first
+  `FLOCK.md` → deduplication → opt-in label alignment), distilled from piloting the
+  migration on two of the standard's source repositories (2026-08-27). Its core rules:
+  never verify by eye when a consuming tool exists, count inbound references before
+  moving a section, declare the house status vocabulary rather than rewriting
+  documents to the default one.
 
 ## 0.2.0 — draft (unreleased)
 

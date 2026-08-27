@@ -39,6 +39,11 @@ Every documentation location a contributor is expected to know about SHOULD have
 A location not listed in the Docs Map is, by definition, not part of the repo's
 knowledge contract.
 
+The **Where** cell SHOULD contain the path or glob and nothing else. A tool reads the
+cell as a literal path, so an annotation glued to it — a file count, a note — turns the
+row into a location that does not exist, and the failure is silent. Annotations belong
+in **Answers**.
+
 ### 2.2 Index (recommended)
 
 `FLOCK.md` SHOULD contain a `## Index` section pointing at one file that lists ongoing

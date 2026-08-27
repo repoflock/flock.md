@@ -84,6 +84,96 @@ Read https://github.com/repoflock/flock.md and adopt the standard in this reposi
 Do not move, rename, or rewrite any existing file.
 ```
 
+### Migrating an established docs system
+
+Some repositories already run a full convention system — typically grown inside an
+agent instruction file: a docs map, status labels, history rules, all in one place.
+Migrating that to Flock is a **deduplication** problem, not a declaration problem:
+`FLOCK.md` takes over the knowledge contract, the agent file keeps the build-and-test
+rules, and still nothing moves.
+
+This prompt runs the migration in phases with a review stop after each. It was
+distilled from migrating the standard's own source repositories, and the rules it
+carries — baseline numbers first, paths-only Where cells, verify with the consuming
+tool rather than by eye — each earned their place by catching a real failure:
+
+```text
+Read https://github.com/repoflock/flock.md. This repository already has a working
+docs system — its conventions live in an agent instruction file (AGENTS.md,
+CLAUDE.md, .cursorrules …) and/or scattered READMEs. Migrate it to the Flock
+standard. Work in phases and STOP for my review after each phase. Leave every
+change uncommitted.
+
+Phase 0 — Dry run (read-only, write nothing):
+1. Inventory: every agent instruction file, every docs directory (count files
+   per kind), and the file that actually serves as the index of ongoing work.
+   The index may live inside another document (a roadmap section of a spec) —
+   record where it really is, not where the spec's defaults would put it.
+2. Detect leftovers of any earlier or aborted adoption: a FLOCK.md or index stub
+   whose declarations do not match what actually exists. A FLOCK.md that
+   describes a repo that doesn't exist is worse than none.
+3. Measure the labels as used: which label lines documents actually open with
+   (Status / Target / house variants), and the actual status vocabulary with a
+   count per variant. Do not assume the spec defaults are in use.
+4. Measure the duplication: list every place that answers "where do docs live"
+   or "what states does work move through" — agent file sections, README doc
+   maps, wiki pages. These are candidates to collapse into FLOCK.md.
+5. If any tool consumes FLOCK.md (an app, a linter, a script), run it now and
+   record the before-numbers: how many documents it finds, how many labels it
+   parses. These are the baseline the migration must not regress.
+Report all of the above with counts, then STOP.
+
+Phase 1 — FLOCK.md, truth-first:
+- Write FLOCK.md declaring the paths, index file, and status vocabulary that
+  ACTUALLY exist. Do not scaffold new directories, do not create a new index,
+  do not declare the spec's default vocabulary unless the repo really uses it.
+- The Where column of the Docs Map holds a path or glob and NOTHING else —
+  no file counts, no parenthetical notes, no prose. A tool reads that cell as
+  a literal path; "docs/feature/ (20 files)" is a directory that does not
+  exist, and the failure is silent. Annotations belong in the Answers column.
+- An index that lives inside another document is fine: link the file in the
+  Docs Map row and the ## Index section, and say which section holds the table.
+- Delete only stub files a previous adoption created that duplicate a real file.
+- Do not move, rename, or rewrite any existing document.
+- CLOSE THE PHASE BY VERIFYING WITH A TOOL, NOT BY EYE: re-run the Phase 0
+  consumer against the new FLOCK.md and compare with the baseline. Every kind
+  it found before, it must still find; the index must resolve to the real
+  file. A FLOCK.md can read perfectly to a human and still parse to zero.
+  If no consumer exists, at minimum script a check that every Where path in
+  the Docs Map exists on disk.
+
+Phase 2 — Deduplicate:
+- The agent instruction file keeps "how to build, test, and write code here";
+  FLOCK.md takes "where knowledge lives, lifecycle, status labels, history
+  conventions". Replace the agent file's docs-map content with one line:
+  "Docs and project conventions: see FLOCK.md."
+- Before moving any section, count inbound references to it (links AND
+  by-name mentions). Prefer moving low-reference sections; leave heavily
+  referenced ones in place and link to them from FLOCK.md instead.
+- Dated decisions and SUPERSEDED blocks move verbatim — never delete or
+  rewrite recorded history (spec §4).
+- A doc-writing style guide too long for FLOCK.md goes to its own file,
+  declared as a Docs Map row.
+- Close the phase the same way: re-run the consumer, confirm the numbers
+  did not regress.
+
+Phase 3 — Data alignment (only with my explicit approval, per item):
+- Propose ONLY cheap mechanical renames that make existing labels match the
+  spec's recognized ones (e.g. a house "Release target:" label → "Target:").
+  One label per batch, line-based edits (mind CRLF), assert the changed-file
+  count against the Phase 0 measurement.
+- Do NOT rewrite the status vocabulary in documents — it is declared in
+  FLOCK.md instead. Do NOT convert a hand-maintained index to the
+  machine-writable table (spec §3.3: opt-in).
+- Close with the consumer run: report before/after numbers for every batch.
+
+Decisions you must ask me about, never decide yourself:
+- whether a secondary per-file doc map (e.g. in README) is kept, trimmed, or moved;
+- whether the index becomes machine-writable;
+- which spec version the declaration line names;
+- any rename touching more than a handful of files.
+```
+
 ### Growing later
 
 When your project grows into a full design-to-delivery flow, graduate to the
