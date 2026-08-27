@@ -40,6 +40,17 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   a second manual to join); and full index backfill on adoption (a backfilled table is
   too large to verify, and an index that might be wrong is worse than a shorter one
   that is right).
+- Terminology (decided 2026-08-27): "lifecycle" names the question chain; the states a
+  piece of work moves through are Status Labels. The README previously used
+  "Lifecycle" for the states — renamed. The two sections every flow `FLOCK.md` carries
+  are now named in the spec — `## Lifecycle` (the chain) and `## Conventions` (the §4
+  rules) — and listed in the §7 summary; previously only the templates showed them (§3).
+- `examples/full/docs/ROADMAP.md`: a worked machine-writable index — the file every
+  profile's Index section points at, which no example actually contained. Its rows
+  mirror the §3.4 transitions: a `Design` item has only its feature document, a
+  `Building` item has all three.
+- §3.4 wording: "either transition" → "any of these transitions" (three have been
+  listed since 0.2).
 
 ## 0.2.0 — draft (unreleased)
 

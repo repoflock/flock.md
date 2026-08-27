@@ -86,6 +86,12 @@ The chain fixes the lifecycle, not the whole map: kinds outside the chain
 locations are defaults, not requirements — the Docs Map declares the actual path, so
 a repo already using, say, `docs/blueprints/` stays conforming without renaming.
 
+A flow-profile `FLOCK.md` SHOULD carry two sections beyond the core three: a
+`## Lifecycle` section stating the chain and how this repository runs it, and a
+`## Conventions` section restating the §4 history rules — the shape
+[`FLOCK_FLOW.md`](templates/FLOCK_FLOW.md) scaffolds. "Lifecycle" names the chain;
+the states a piece of work moves through are Status Labels (§2.3).
+
 Rules:
 
 - Each `feature` SHOULD link to its `blueprint` and `worklog`, and each of those MUST
@@ -169,8 +175,9 @@ Three transitions are common enough to name, so tools can offer them:
   templates, complete the three-way links, and update Status in both the feature
   document and the index.
 
-A tool performing either transition SHOULD leave the results as uncommitted changes for
-a human to review, and MUST NOT overwrite an existing file or commit on its own.
+A tool performing any of these transitions SHOULD leave the results as uncommitted
+changes for a human to review, and MUST NOT overwrite an existing file or commit on its
+own.
 
 ## 4. History conventions
 
@@ -227,7 +234,7 @@ must be survivable rather than fatal.
 | Level | Requirements |
 |---|---|
 | **Core** | `FLOCK.md` at root · Docs Map section |
-| **Flow** | Core, plus the §3 kind vocabulary and linking rules |
+| **Flow** | Core, plus the §3 kind vocabulary, linking rules, and the `## Lifecycle` / `## Conventions` sections |
 | **Flow, machine-writable** *(opt-in)* | Flow, plus the §3.1 label block and a §3.3 index table |
 
 Everything not marked MUST is guidance: adopt what earns its keep.

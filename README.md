@@ -25,7 +25,7 @@ answers *"where does this repo's knowledge live, and what states does work move 
 A single markdown file, `FLOCK.md`, at the repository root. It declares:
 
 1. **Docs Map** — what kinds of documents exist and where they live.
-2. **Lifecycle** — the states work moves through (e.g. design → building → done).
+2. **Status labels** — the states work moves through (e.g. `Design` → `Building` → `Done`).
 3. **Index** — where the one-line-per-feature overview lives.
 4. **Conventions** — the history rules: decisions carry dates, reversals are patched
    in place and marked `SUPERSEDED`, rejected alternatives are recorded.
@@ -75,7 +75,7 @@ Handing adoption to an agent? This prompt carries the guardrails:
 ```text
 Read https://github.com/repoflock/flock.md and adopt the standard in this repository:
 
-1. Create FLOCK.md at the repo root, starting from the minimal template.
+1. Create FLOCK.md at the repo root, starting from examples/minimal/FLOCK.md.
 2. Fill in the Docs Map from the documentation that already exists here — do not
    invent sections for documents we do not have.
 3. Add this line to AGENTS.md — or to whichever instruction file this repo
