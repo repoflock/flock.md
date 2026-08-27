@@ -55,6 +55,14 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   **Answers**. Found by migrating a source repository (decided 2026-08-27): a
   `(20 file)` count glued to the path made the consuming tool read a directory that
   does not exist, and 20 feature documents silently parsed as zero.
+- Round task list, opt-in (decided 2026-08-28): a blueprint MAY carry its rounds as
+  GFM task items, checked as each round closes; a tool MAY read checked / total as the
+  unit's task progress, and MUST NOT edit the list beyond offering the check-off
+  (§3.5). The blueprint is where the total exists before work starts. Rejected: the
+  checklist in the worklog (append-only, it never knows the denominator; seeding it
+  from the blueprint makes two copies of one truth), and counting section headings
+  (a heuristic that imposes a layout §3.2 only suggests). The `BLUEPRINT.md` template
+  now shows the list heading its per-round sections.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first

@@ -17,6 +17,12 @@ memory. Where this differs from the feature document, fix the feature document f
 
 ## Rounds
 
+- [ ] B1 — <title>
+- [ ] B2 — <title>
+
+<Check a round off when it closes — the same moment its worklog entry is appended.
+Tools read checked / total as task progress (§3.5).>
+
 ### B1 — <title>
 
 <Files touched. The round stands alone: it builds green and is committable by itself.>

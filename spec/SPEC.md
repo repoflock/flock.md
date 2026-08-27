@@ -103,7 +103,8 @@ Rules:
   link back to its `feature` — a reader landing on any of the three can reach the other
   two ("three-way linking").
 - A `blueprint` SHOULD describe the current state of the code as measured, not as
-  remembered, and SHOULD break work into rounds that each stand alone.
+  remembered, and SHOULD break work into rounds that each stand alone. §3.5 gives the
+  round list a machine-readable shape.
 - A `worklog` entry SHOULD be appended when a round of work closes, and SHOULD record
   deviations from the blueprint and decisions that emerged during the work.
 - A `feature` SHOULD state what is explicitly out of scope, and SHOULD define done as
@@ -183,6 +184,31 @@ Three transitions are common enough to name, so tools can offer them:
 A tool performing any of these transitions SHOULD leave the results as uncommitted
 changes for a human to review, and MUST NOT overwrite an existing file or commit on its
 own.
+
+### 3.5 Round task list *(new in 0.3)*
+
+A blueprint MAY carry its rounds as a GFM task list — one task item per round, checked
+when the round closes, the same moment the worklog entry for that round is appended:
+
+```markdown
+## Rounds
+
+- [x] B1 — Contracts and service
+- [ ] B2 — Renderer surface
+```
+
+The blueprint is the document that declares the rounds (§3), so it is the one place the
+total exists before the work starts.
+
+- A tool MAY read checked / total over the blueprint's task items as the unit's task
+  progress. Task items inside fenced code blocks do not count.
+- A blueprint with no task items declares no progress. That is not an error — it is an
+  older or hand-shaped blueprint (§6); the tool simply has no progress to show.
+- The list belongs to the author: a tool MUST NOT add, remove, or reorder items on its
+  own. Checking an item off is a write a tool MAY offer, under the same review rule as
+  §3.4 — the result stays uncommitted for a human to review.
+- The list MAY stand alone or head a set of per-round sections; the template (§3.2)
+  shows the combined shape.
 
 ## 4. History conventions
 
