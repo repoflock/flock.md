@@ -158,6 +158,11 @@ Three transitions are common enough to name, so tools can offer them:
 - **Adopt** *(no `FLOCK.md` → core or flow)*: create `FLOCK.md` at the repository root
   from the matching profile template. For the flow profile, also create the index file
   it references, seeded with the §3.3 table header — so Open has somewhere to write.
+  In a repository that already has documentation, Adopt is declarative: the Docs Map
+  points at documents where they already are (typical locations are defaults, not
+  requirements), and the transition MUST NOT move, rename, or rewrite existing files.
+  Backfilling is not required — neither index rows for finished work nor §4 dates in
+  pre-existing documents; the conventions apply from adoption forward.
 - **Open** *(nothing → `Design`)*: create the feature document from its template and add
   an index row.
 - **Advance** *(`Design` → `Building`)*: create the blueprint and worklog from their
@@ -189,8 +194,9 @@ agents that will otherwise confidently re-litigate or refactor away decisions.
   moving documentation, and SHOULD place new documents according to the Docs Map.
 - Agents MUST follow the history conventions of §4 — in particular, agents MUST NOT
   delete or rewrite recorded decisions; they supersede them in place.
-- `FLOCK.md` complements `AGENTS.md`; it does not replace it. Repos with an `AGENTS.md`
-  SHOULD reference `FLOCK.md` from it.
+- `FLOCK.md` complements `AGENTS.md`; it does not replace it. A repo that keeps an
+  instruction file for agents — `AGENTS.md`, `CLAUDE.md`, or a tool-specific
+  equivalent — SHOULD reference `FLOCK.md` from it.
 - In a flow-profile repo, an agent opening or advancing work SHOULD use the §3.4
   transitions and the §3.2 templates rather than inventing structure.
 

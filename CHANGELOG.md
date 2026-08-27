@@ -25,6 +25,21 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   Target column is for, and a single declared index file is what lets a tool know
   where to write (§3.3); per-release *planning documents* are a kind of their own,
   declared as a Docs Map row, not a variant of the index.
+- Adoption for repositories with existing documentation (decided 2026-08-27): §3.4
+  Adopt is declarative — the Docs Map points at documents where they already are, the
+  transition MUST NOT move, rename, or rewrite existing files, and backfilling (index
+  rows for finished work, §4 dates in old documents) is not required; conventions
+  apply from adoption forward. README Quick start splits into the two paths — starting
+  fresh vs. already have docs — and carries an agent prompt for the second, since a
+  standard published this year is one no model was trained on.
+- §5: the cross-reference recommendation names the general case — any agent
+  instruction file (`AGENTS.md`, `CLAUDE.md`, or a tool-specific equivalent), not only
+  `AGENTS.md`. None of the standard's own source repositories use the name `AGENTS.md`.
+- Rejected (decided 2026-08-27): a separate `ADOPTING.md` (deferred until the guide
+  outgrows its README section — a standard whose spec fits on one page should not need
+  a second manual to join); and full index backfill on adoption (a backfilled table is
+  too large to verify, and an index that might be wrong is worse than a shorter one
+  that is right).
 
 ## 0.2.0 — draft (unreleased)
 

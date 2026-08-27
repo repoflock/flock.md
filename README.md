@@ -48,8 +48,43 @@ rows — the chain fixes the lifecycle, not the whole map.
 
 ## Quick start
 
+### Starting fresh
+
 Copy [`examples/minimal/FLOCK.md`](examples/minimal/FLOCK.md) to your repo root and fill
 in the Docs Map table. Done — that is a valid core-profile adoption.
+
+### Already have docs
+
+Adoption is a declaration, not a migration. The spec's typical locations are defaults;
+the Docs Map declares your real paths — so nothing moves:
+
+1. Inventory the documentation the repo already has.
+2. Write Docs Map rows pointing at the paths where those documents already live. Do not
+   add rows for kinds of documents you do not have.
+3. Add the pointer line to your agent instruction file (next section).
+
+That is the whole adoption: one new file, one pointer line, zero moved files. The
+history conventions apply from adoption day forward — do not backfill dates or
+`SUPERSEDED` marks into old documents. If you graduate to the flow profile later, start
+the index with new work rather than backfilling every finished feature: a backfilled
+table is too large to verify, and an index that might be wrong is worse than a shorter
+one that is right.
+
+Handing adoption to an agent? This prompt carries the guardrails:
+
+```text
+Read https://github.com/repoflock/flock.md and adopt the standard in this repository:
+
+1. Create FLOCK.md at the repo root, starting from the minimal template.
+2. Fill in the Docs Map from the documentation that already exists here — do not
+   invent sections for documents we do not have.
+3. Add this line to AGENTS.md — or to whichever instruction file this repo
+   already keeps for agents (CLAUDE.md, .cursorrules): Docs and project conventions: see FLOCK.md.
+
+Do not move, rename, or rewrite any existing file.
+```
+
+### Growing later
 
 When your project grows into a full design-to-delivery flow, graduate to the
 [flow profile](spec/SPEC.md#3-the-flow-profile): see
@@ -65,7 +100,8 @@ They are complementary, not competing:
 | Audience | Coding agents | Humans **and** agents |
 | Scope | Code conventions | Docs & project management |
 
-Recommended: add one line to your `AGENTS.md` — `Docs and project conventions: see FLOCK.md.`
+Recommended: add one line to your agent instruction file — `AGENTS.md`, `CLAUDE.md`, or
+your tool's equivalent — `Docs and project conventions: see FLOCK.md.`
 
 ## Read the spec
 
