@@ -147,6 +147,25 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   may be revisited if repos grow rich house checks); and the path-existence
   floor as the only answer (measured across two dogfood runs: every real
   defect surfaced through a consumer run, none through path existence).
+- README: the approved rename gets its own prompt — "Running an approved label rename"
+  (decided 2026-08-28). The priced-list mechanism previously ended at "approved
+  renames run under the migration prompt's Phase 3 discipline", which left the
+  executing pass without a prompt to hand an agent — and re-running a whole migration
+  for one label is the wrong tool. The pass is now its own section, superseding that
+  pointer: one approved line per run, re-measured before editing, keys renamed with
+  values kept byte-for-byte, closed by the consuming tool's before/after numbers.
+  Its two hard rules were priced on a real adoption (twenty feature documents,
+  measured 2026-08-28): a `Target:` rename is the one that is NOT mechanical — tools
+  group by the exact value string, and every Target value in that adoption was a
+  clause, so the mechanical rename would have produced twenty groups of one; values
+  normalize to short codes, a document whose version cannot be read from it loses the
+  label rather than gaining an invented one, and the key rename is all documents or
+  none, because one declared `Target:` flips how a tool organizes every other
+  document. An anchor-heading batch (house heading → `Rounds`) carries its own trap:
+  the section runs to the next same-or-higher heading, so a Definition of Done that
+  sat safely under its own heading must not fall inside `Rounds`. Phase 3's
+  "mechanical rename" example was corrected accordingly — `Release target:` →
+  `Target:` was the one example that is not mechanical.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first

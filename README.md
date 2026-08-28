@@ -181,9 +181,11 @@ Phase 2 — Deduplicate:
 
 Phase 3 — Data alignment (only with my explicit approval, per item):
 - Propose ONLY cheap mechanical renames that make existing labels match the
-  spec's recognized ones (e.g. a house "Release target:" label → "Target:").
-  One label per batch, line-based edits (mind CRLF), assert the changed-file
-  count against the Phase 0 measurement.
+  spec's recognized ones (e.g. a house "Blueprint thực thi:" label →
+  "Blueprint:"). One label per batch, line-based edits (mind CRLF), assert
+  the changed-file count against the Phase 0 measurement. A Target-like
+  rename is NOT on this menu — its values need normalizing, not only its
+  name; hand it to the label-rename prompt (two sections down).
 - Do NOT rewrite the status vocabulary in documents — it is declared in
   FLOCK.md instead. Do NOT convert a hand-maintained index to the
   machine-writable table (spec §3.3: opt-in). Do NOT rewrite existing
@@ -266,7 +268,7 @@ not the steps.
      shape fix that changes no word, a real rename, or a label absent
      outright, whose fix is an added line rather than a change — but act on
      none of them: I decide per line, and an approved change then runs as
-     its own pass, one label per batch with the changed-file count asserted,
+     its own pass — the label-rename prompt (next section) is that pass —
      never inside this upgrade.
    - Opt-in machine-readable shapes (a §3.3 index header, §3.5 round task
      lists) are adopted for work still in flight only. Before adopting one,
@@ -296,6 +298,78 @@ not the steps.
    close with the report: what was adopted, what was skipped and why, what
    you had to leave to me, and the before/after numbers from step 2.
    "Nothing needed changing" is a valid report; an invented change is not.
+```
+
+### Running an approved label rename
+
+Both prompts above end at the same doorstep: house labels that block a machine-readable
+feature go on a priced list, and the owner decides per line. This is the pass an
+approved line comes back to. It stays out of the migration and the upgrade on purpose —
+a rename touches many files to change one word, and that review only works when the
+diff contains nothing else. The `Target:` rules were priced on a real adoption: twenty
+feature documents, every Target value a clause — the mechanical rename would have
+handed the consuming tool twenty groups of one.
+
+```text
+Read https://github.com/repoflock/flock.md. This repository conforms to the
+Flock standard with house label names, and I have approved renaming ONE of
+them to the spec's name — or moving one anchor heading to its spec word
+(a house rounds heading → `Rounds`). Run that single batch and nothing
+else, uncommitted — the diff is the review.
+
+The approved line: <house name> → <spec name>, expected to touch <N> files.
+If I did not fill those in, stop and ask: this prompt runs a decision, it
+does not make one. If a dated decision in this repository says this label
+stays, my approved line supersedes it — record that in place (spec §4),
+never by deleting the old decision.
+
+1. Re-measure before editing: count the occurrences and files yourself. If
+   your count disagrees with the approved line's, stop and report —
+   approval was priced on that number. Capture `git status --short`;
+   files already modified are someone's work in flight, skipped and named
+   in the report. Then find the consuming tool (a check this repository
+   itself declares, else `node tools/check.mjs <repo>` from the standard's
+   repository, else a reference implementation installed here) and record
+   its numbers as the baseline.
+2. Rename the KEY, never the value. The label's name is the machine-readable
+   surface; everything after the colon is the repo's own prose, in the
+   repo's own language, and stays byte-for-byte. Line-based edits, keeping
+   each file's own line endings; assert the changed-file count equals what
+   you measured in step 1.
+3. `Target:` is the one label whose rename is not mechanical, because a tool
+   that organizes work by Target groups by the exact string — the §3.3
+   index column expects the same short value the document carries. Before
+   renaming a Target-like label:
+   - Inventory every value first. Short codes (`1.2`, `v0.4`) — the rename
+     is mechanical after all; proceed.
+   - Clauses ("after v0.1, blocks nothing — …") — a mechanical rename gives
+     the tool one group per document, worse than no label. Normalize per
+     document: the value becomes the short code alone; the clause moves to
+     a line of its own below the label block. A document whose version
+     cannot be read from the document itself LOSES the label rather than
+     gaining an invented one — absent is honest, wrong is not.
+   - One document declaring `Target:` changes how a tool organizes every
+     other document (they fall into its no-target bucket), so the key
+     rename is all documents or none. Documents that lose the label per
+     the rule above are fine; documents still carrying the house key are
+     not — stop and report rather than leave the repo half-flipped.
+4. An anchor-heading batch (house heading → `Rounds`) moves only the heading
+   word; the checklist and every subheading under it stay untouched. Then
+   check where the section now ENDS: it runs to the next heading of the
+   same or a higher level, so a Definition of Done that sat safely under
+   its own house heading must not fall inside `Rounds`. Finished documents
+   keep their prose rounds unless the approved line says otherwise —
+   backfilling done work is a separate decision, not a default.
+5. FLOCK.md keeps the record straight: if it declares a house-label mapping
+   or carries the priced list, update this label's entry — superseded in
+   place with the date (spec §4), never deleted; the remaining house
+   labels keep theirs.
+6. Close with the consuming tool: re-run it, report before/after. The number
+   this rename was priced to move must move — a Target batch moves the
+   parsed-target count, a Rounds batch the round-list count — and every
+   other number must hold. Then the report: files touched; for a Target
+   batch the value table, old → new; documents that lost the label and
+   why; anything skipped as in-flight work.
 ```
 
 ### Checking an adoption
