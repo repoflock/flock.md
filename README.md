@@ -220,9 +220,14 @@ not the steps.
    - House label names stay, exactly like the house vocabulary. Never add a
      spec-named label to a document that already carries this repo's
      equivalent, and never introduce a second variant of a label already in
-     use. If an opt-in cannot be adopted without a rename, SKIP IT and
-     report the blocker — a rename across documents is a decision for me,
-     not a step in an upgrade.
+     use. When a house label blocks a machine-readable feature, skip the
+     feature — and put the blocker on the closing report as a priced line,
+     one per label: which label, which feature it blocks, how many files a
+     rename would touch, and whether a dated decision in this repo already
+     covers keeping it. Classify each line — a pure shape fix that changes
+     no word, versus a real rename — but act on neither: I decide per line,
+     and an approved rename then runs as its own pass, one label per batch
+     with the changed-file count asserted, never inside this upgrade.
    - Opt-in machine-readable shapes (a §3.3 index header, §3.5 round task
      lists) are adopted for work still in flight only. Read "in flight" from
      the status vocabulary this repo declares in FLOCK.md, not from the

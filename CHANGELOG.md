@@ -98,6 +98,19 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   is a documentation change, not an upgrade; the opt-ins in play belong recorded
   in FLOCK.md; and the source line must not send an agent to a published spec
   that predates the change it was sent to adopt.
+  Refined once more when the run's numbers were read back (decided 2026-08-28):
+  "skip and report the blocker" was too passive to decide on. A house label that
+  blocks a machine-readable feature is now reported as a priced line — which
+  label, which feature, how many files a rename touches, which dated decision
+  already covers keeping it — classified shape-fix versus real rename, acted on
+  by neither: approved renames run as their own pass under the migration
+  prompt's Phase 3 discipline. Forcing normalization was rejected on three
+  grounds: a tool re-litigating a repo's dated decisions is what §4–§5 exist to
+  prevent; one-pass diff review is only safe while every edit is additive — a
+  bulk rename hides its risk in the noise; and the machine tier is opt-in by
+  design, so a prompt must not be more aggressive than the spec it serves. The
+  two prompts thereby become one mechanism: the upgrade produces the list that
+  Phase 3 executes.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first
