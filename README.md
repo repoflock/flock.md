@@ -118,7 +118,9 @@ Phase 0 — Dry run (read-only, write nothing):
 4. Measure the duplication: list every place that answers "where do docs live"
    or "what states does work move through" — agent file sections, README doc
    maps, wiki pages. These are candidates to collapse into FLOCK.md.
-5. If any tool consumes FLOCK.md (an app, a linter, a script), run it now and
+5. Find the tool that consumes FLOCK.md — a check this repo itself declares,
+   else `node tools/check.mjs <repo>` from the standard's own repository,
+   else a reference implementation installed here — run it now and
    record the before-numbers: how many documents it finds, how many labels it
    parses. These are the baseline the migration must not regress.
 Report all of the above with counts, then STOP.
@@ -209,10 +211,14 @@ not the steps.
    where a later step points; skip them and name them in the closing report.
    "The diff is the review" only holds if the reviewer can tell your diff
    from theirs, so the report also lists exactly the files this pass touched.
-   Then, if any tool consumes FLOCK.md (an app, a linter, a script), run it
-   and record its numbers — how many documents it finds, how many labels it
-   parses, what the index resolves to. Run it again at the end. Nothing it
-   found before may go missing.
+   Then find the consuming tool, in this order: a check this repository
+   itself declares (grep its scripts and CI for flock); the standard's own
+   checker — `node tools/check.mjs <repo>` in the repository this spec came
+   from; a reference implementation installed on this machine. Found none?
+   The floor is still owed: script a check that every Where path in the
+   Docs Map exists. Run what you found and record its numbers — how many
+   documents it finds, how many labels it parses, what the index resolves
+   to. Run it again at the end. Nothing it found before may go missing.
    Record whether what it finds is RIGHT, not only how much: a section that
    parses to garbage is a regression already present, and repairing it
    belongs to this pass — though a wrong parse that a dated decision already
@@ -271,6 +277,20 @@ not the steps.
    you had to leave to me, and the before/after numbers from step 2.
    "Nothing needed changing" is a valid report; an invented change is not.
 ```
+
+### Checking an adoption
+
+The standard carries its own conformance checker, so the verification the prompts
+above lean on is never a tool you have to go find:
+
+```bash
+node tools/check.mjs <path-to-repo>
+```
+
+It prints what a tool can read from the adoption — kinds declared, labels parsed,
+where the index resolves, §3.5 round counts — and fails only on MUST violations;
+everything else the spec leaves as guidance, and the checker holds itself to that
+line. `--self-test` runs it against the shapes real adoptions have taught it.
 
 ### Growing later
 

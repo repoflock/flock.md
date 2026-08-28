@@ -127,6 +127,26 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   sections are expected to move no consumer numbers, so the report says so
   instead of flagging them; and the opt-in record in FLOCK.md now names what
   is deliberately NOT in play, with its blocker.
+- `tools/check.mjs` — the standard's own conformance checker (decided
+  2026-08-28), answering the question both agent prompts left open: an adopter
+  had no way to *find* the consuming tool their verification step leans on. It
+  travels with the spec — the one repository every prompt already sends the
+  agent to — so discovery costs nothing; the prompts now search in order
+  (repo-declared check → this checker → an installed reference implementation →
+  the path-existence floor). It reads the full machine tier (§1 declaration,
+  §2.1 Docs Map with Where resolution, §2.2 index, §2.3 vocabulary, §3.1
+  labels, §3.3 header, §3.5 round counts), fails only on MUST violations, and
+  ships a self-test built from the shapes two real adoptions exhibited — which
+  caught, on its first run, this second parser drifting from the reference
+  implementation (a naming-convention fallback applied without the label that
+  §3.1 makes the door). Verified to agree with the reference implementation on
+  both dogfooded repositories. Rejected: declaring consumers in FLOCK.md (they
+  live outside the repo and the list rots — FLOCK.md declares where knowledge
+  lives, not what software exists); a `Verify:` field (the first machine field
+  about software rather than knowledge, and the checker makes it unnecessary —
+  may be revisited if repos grow rich house checks); and the path-existence
+  floor as the only answer (measured across two dogfood runs: every real
+  defect surfaced through a consumer run, none through path existence).
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first
