@@ -63,6 +63,15 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   from the blueprint makes two copies of one truth), and counting section headings
   (a heuristic that imposes a layout §3.2 only suggests). The `BLUEPRINT.md` template
   now shows the list heading its per-round sections.
+- README: Quick start gains a fourth path — upgrading an existing adoption to a
+  newer spec version (decided 2026-08-28). The agent prompt is deliberately
+  version-agnostic: it reads the CHANGELOG gap rather than hard-coding a release,
+  adopts opt-ins (§3.3 header, §3.5 round lists) for work in flight only, never
+  backfills or renames, bumps the declaration line last, and runs in one pass —
+  everything lands uncommitted, so the diff is the review. The migration prompt's
+  Phase 3 gains the matching guard (do not rewrite round sections into §3.5 task
+  lists during a migration) and points there instead of growing its own upgrade
+  rules.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first

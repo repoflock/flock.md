@@ -164,7 +164,10 @@ Phase 3 — Data alignment (only with my explicit approval, per item):
   count against the Phase 0 measurement.
 - Do NOT rewrite the status vocabulary in documents — it is declared in
   FLOCK.md instead. Do NOT convert a hand-maintained index to the
-  machine-writable table (spec §3.3: opt-in).
+  machine-writable table (spec §3.3: opt-in). Do NOT rewrite existing
+  blueprints' round sections into §3.5 task lists — adopting newer opt-ins
+  is the upgrade prompt's job (next section), a separate pass for after the
+  migration has settled.
 - Close with the consumer run: report before/after numbers for every batch.
 
 Decisions you must ask me about, never decide yourself:
@@ -172,6 +175,45 @@ Decisions you must ask me about, never decide yourself:
 - whether the index becomes machine-writable;
 - which spec version the declaration line names;
 - any rename touching more than a handful of files.
+```
+
+### Upgrading to a newer spec version
+
+Repositories are not expected to chase the spec (§6): an older adoption keeps
+conforming, and tools keep reading it. Upgrade when a newer version carries something
+you actually want. The prompt below is deliberately version-agnostic — it reads the
+CHANGELOG gap instead of hard-coding any release — and it runs in one pass, because
+everything lands uncommitted: **the diff is the review**, not stops along the way.
+
+```text
+Read https://github.com/repoflock/flock.md — spec/SPEC.md and CHANGELOG.md.
+This repository already conforms to the Flock standard at the version its
+FLOCK.md declaration line names. Upgrade the adoption to the current spec
+version, in one pass, leaving every change uncommitted — I review the diff,
+not the steps.
+
+1. Establish the gap: read the declaration line, then every CHANGELOG entry
+   between that version and the current one. List what is relevant to this
+   repository — an opt-in it has no use for is not part of this upgrade.
+2. If any tool consumes FLOCK.md (an app, a linter, a script), run it before
+   touching anything and record its numbers; run it again at the end.
+   Nothing it found before may go missing.
+3. Adopt what pays, and only that:
+   - Sections or labels the spec now recommends: add them where a document
+     gains them naturally. A declaration bump with no other edits is a
+     valid outcome, not a failed upgrade.
+   - Opt-in machine-readable shapes (a §3.3 index header, §3.5 round task
+     lists) are adopted for work still in flight only. Do not backfill
+     finished work: a shipped feature's blueprint keeps its prose rounds,
+     and the index gains no rows for done work.
+   - Changed typical locations are defaults, not requirements: move and
+     rename nothing — the Docs Map already declares the real paths.
+4. Rewrite no history: dated decisions, SUPERSEDED blocks and finished
+   documents stay byte-for-byte, and the status vocabulary stays the house
+   one. Line-based edits only, keeping each file's own line endings.
+5. Bump the declaration line to the new version last, then close with the
+   report: what was adopted, what was skipped and why, and the before/after
+   numbers from step 2.
 ```
 
 ### Growing later
