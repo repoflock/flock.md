@@ -71,7 +71,10 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   everything lands uncommitted, so the diff is the review. The migration prompt's
   Phase 3 gains the matching guard (do not rewrite round sections into §3.5 task
   lists during a migration) and points there instead of growing its own upgrade
-  rules.
+  rules. The prompt also handles the case a `0.x` draft creates: a repository
+  that adopted a draft version before the draft grew declares the same number as
+  the spec while lacking what that number now covers, so equal versions are
+  checked item by item rather than treated as nothing to do.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first

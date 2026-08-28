@@ -195,6 +195,11 @@ not the steps.
 1. Establish the gap: read the declaration line, then every CHANGELOG entry
    between that version and the current one. List what is relevant to this
    repository — an opt-in it has no use for is not part of this upgrade.
+   If the declared version equals the current one AND that version is still
+   marked draft/unreleased, read its entry anyway: a draft keeps growing
+   after repositories adopt it, so the number alone cannot tell you whether
+   this repo has what the version now contains. Check the repo against that
+   entry item by item; equal version numbers are not evidence of equal shape.
 2. If any tool consumes FLOCK.md (an app, a linter, a script), run it before
    touching anything and record its numbers; run it again at the end.
    Nothing it found before may go missing.
