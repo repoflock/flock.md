@@ -68,6 +68,24 @@ the work: an agent has never heard of a standard this new, so it finds `FLOCK.md
 a file it already reads — and from then on it writes documents where the map says, from
 day one. Edit the map when reality diverges from the defaults, not before.
 
+**Fresh and serious?** If the project is headed for real design-to-delivery development —
+features that deserve a design before the build and a record after it — start from
+[`examples/full/FLOCK.md`](examples/full/FLOCK.md) instead. The flow profile's real cost
+is backfill, and a fresh repository has nothing to backfill: day one is the one moment
+the full flow is free, and every feature enters the index born linked. One extra step —
+seed the index file the template names, so the first feature has somewhere to land (§3.4):
+
+```markdown
+<!-- docs/ROADMAP.md -->
+| Item | Target | Status | Docs |
+|---|---|---|---|
+```
+
+The other declared directories come into existence with the documents themselves; the
+checker reads a clean path that does not exist yet as a plan, not a violation. Not sure
+the project will grow that way? Starting core costs nothing later — graduating to the
+flow profile is additive ([Growing later](#growing-later)).
+
 No agent prompt for this case — copying one file and adding one line is less work than
 handing it off. The prompts below are for repositories that already have documents to
 declare.

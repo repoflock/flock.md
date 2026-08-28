@@ -30,7 +30,7 @@ chain fixes the lifecycle, not the whole map.
 ## Index
 
 [docs/ROADMAP.md](docs/ROADMAP.md) — one line per feature, machine-writable
-([spec §3.3](../../spec/SPEC.md#33-machine-writable-index-new-in-02)):
+([spec §3.3](https://github.com/repoflock/flock.md/blob/main/spec/SPEC.md#33-machine-writable-index-new-in-02)):
 `| Item | Target | Status | Docs |`. Detail lives in the docs, never in the index.
 
 ## Status Labels
