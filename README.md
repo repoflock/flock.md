@@ -48,6 +48,19 @@ rows — the chain fixes the lifecycle, not the whole map.
 
 ## Quick start
 
+Four paths in, one destination. Pick the row that describes your repository today:
+
+| Your repository today | Your path |
+|---|---|
+| Brand new — no documentation yet | [Starting fresh](#starting-fresh): copy a template, add one line. Serious development? Start from the full template — same section. |
+| Has docs, but no system for them | [Already have docs](#already-have-docs): declare where they live — nothing moves. |
+| Already runs a docs system — conventions in `AGENTS.md`/`CLAUDE.md`, doc maps in READMEs | [Migrating an established docs system](#migrating-an-established-docs-system): hand your agent the phased prompt. |
+| Already on Flock, and the spec has moved on | [Upgrading to a newer spec version](#upgrading-to-a-newer-spec-version): hand your agent the upgrade prompt. |
+
+Every path lands in the same place: a `FLOCK.md` at the repository root, one pointer
+line in your agent instruction file — and `node tools/check.mjs <repo>` to confirm
+([Checking an adoption](#checking-an-adoption)).
+
 ### Starting fresh
 
 A repository with no documentation yet has nothing to inventory and nothing to fill in —
