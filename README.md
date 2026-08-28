@@ -50,8 +50,27 @@ rows — the chain fixes the lifecycle, not the whole map.
 
 ### Starting fresh
 
-Copy [`examples/minimal/FLOCK.md`](examples/minimal/FLOCK.md) to your repo root and fill
-in the Docs Map table. Done — that is a valid core-profile adoption.
+A repository with no documentation yet has nothing to inventory and nothing to fill in —
+the template's defaults **are** the adoption:
+
+1. Copy [`examples/minimal/FLOCK.md`](examples/minimal/FLOCK.md) to your repo root, as
+   shipped. Its Docs Map declares the spec's typical locations, and in a fresh repo those
+   are not a description but a plan: the first design note goes in `docs/`, the first
+   decision in `docs/decisions/`, and the map was true before either existed.
+2. Add one line to your agent instruction file (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`):
+
+   ```text
+   Docs and project conventions: see FLOCK.md.
+   ```
+
+Done — that is a valid core-profile adoption, and the pointer line is the half that does
+the work: an agent has never heard of a standard this new, so it finds `FLOCK.md` through
+a file it already reads — and from then on it writes documents where the map says, from
+day one. Edit the map when reality diverges from the defaults, not before.
+
+No agent prompt for this case — copying one file and adding one line is less work than
+handing it off. The prompts below are for repositories that already have documents to
+declare.
 
 ### Already have docs
 
@@ -61,7 +80,8 @@ the Docs Map declares your real paths — so nothing moves:
 1. Inventory the documentation the repo already has.
 2. Write Docs Map rows pointing at the paths where those documents already live. Do not
    add rows for kinds of documents you do not have.
-3. Add the pointer line to your agent instruction file (next section).
+3. Add the pointer line to your agent instruction file — the same one-liner as in
+   *Starting fresh*.
 
 That is the whole adoption: one new file, one pointer line, zero moved files. The
 history conventions apply from adoption day forward — do not backfill dates or
