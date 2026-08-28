@@ -186,7 +186,11 @@ CHANGELOG gap instead of hard-coding any release — and it runs in one pass, be
 everything lands uncommitted: **the diff is the review**, not stops along the way.
 
 ```text
-Read https://github.com/repoflock/flock.md — spec/SPEC.md and CHANGELOG.md.
+Read the current spec — spec/SPEC.md and CHANGELOG.md, from
+https://github.com/repoflock/flock.md unless I have pointed you at a
+checkout that is ahead of it. If what you read turns out to predate the
+change we are here to adopt, say so and stop rather than concluding there
+is nothing to do.
 This repository already conforms to the Flock standard at the version its
 FLOCK.md declaration line names. Upgrade the adoption to the current spec
 version, in one pass, leaving every change uncommitted — I review the diff,
@@ -201,24 +205,46 @@ not the steps.
    this repo has what the version now contains. Check the repo against that
    entry item by item; equal version numbers are not evidence of equal shape.
 2. If any tool consumes FLOCK.md (an app, a linter, a script), run it before
-   touching anything and record its numbers; run it again at the end.
-   Nothing it found before may go missing.
+   touching anything and record its numbers — how many documents it finds,
+   how many labels it parses, what the index resolves to. Run it again at
+   the end. Nothing it found before may go missing.
+   Record whether what it finds is RIGHT, not only how much: a section that
+   parses to garbage is a regression already present, and repairing it
+   belongs to this pass. And if something you adopt does not move those
+   numbers, say so explicitly and name what blocks it — an adoption the
+   consuming tool cannot see is a documentation change, not an upgrade.
 3. Adopt what pays, and only that:
    - Sections or labels the spec now recommends: add them where a document
      gains them naturally. A declaration bump with no other edits is a
      valid outcome, not a failed upgrade.
+   - House label names stay, exactly like the house vocabulary. Never add a
+     spec-named label to a document that already carries this repo's
+     equivalent, and never introduce a second variant of a label already in
+     use. If an opt-in cannot be adopted without a rename, SKIP IT and
+     report the blocker — a rename across documents is a decision for me,
+     not a step in an upgrade.
    - Opt-in machine-readable shapes (a §3.3 index header, §3.5 round task
-     lists) are adopted for work still in flight only. Do not backfill
-     finished work: a shipped feature's blueprint keeps its prose rounds,
-     and the index gains no rows for done work.
+     lists) are adopted for work still in flight only. Read "in flight" from
+     the status vocabulary this repo declares in FLOCK.md, not from the
+     spec's default words. Do not backfill finished work: a shipped
+     feature's blueprint keeps its prose rounds, and the index gains no rows
+     for done work.
+   - Before adding a §3.5 round list, check what task items the blueprint
+     already has: counting is file-wide, so a document whose Definition of
+     Done is a checklist will report those items mixed with the rounds, and
+     the number will be a lie. Report such a file instead of editing it.
    - Changed typical locations are defaults, not requirements: move and
      rename nothing — the Docs Map already declares the real paths.
+   - Record in FLOCK.md which opt-ins are now in play, with the date. It is
+     the file whose job is to say what shape this repo is in.
 4. Rewrite no history: dated decisions, SUPERSEDED blocks and finished
    documents stay byte-for-byte, and the status vocabulary stays the house
    one. Line-based edits only, keeping each file's own line endings.
-5. Bump the declaration line to the new version last, then close with the
-   report: what was adopted, what was skipped and why, and the before/after
-   numbers from step 2.
+5. Bump the declaration line to the new version last — unless the repo
+   already names it, which the draft case in step 1 makes possible. Then
+   close with the report: what was adopted, what was skipped and why, what
+   you had to leave to me, and the before/after numbers from step 2.
+   "Nothing needed changing" is a valid report; an invented change is not.
 ```
 
 ### Growing later

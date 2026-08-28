@@ -75,6 +75,18 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   that adopted a draft version before the draft grew declares the same number as
   the spec while lacking what that number now covers, so equal versions are
   checked item by item rather than treated as nothing to do.
+  Hardened by its first real run (2026-08-28, on a repository that had migrated
+  the day before), which found six gaps: house *label names* need the same
+  protection the house vocabulary already had, or the prompt reads as permission
+  to rename across documents; "in flight" has to be read from the vocabulary the
+  repo declares, since the spec's default words return nothing there; §3.5
+  counting is file-wide, so a blueprint whose Definition of Done is a checklist
+  reports a number mixing two unrelated things; the consumer run has to record
+  whether output is *right*, not only how much of it there is, and has to say
+  when an adopted shape moves no numbers at all — an adoption the tool cannot see
+  is a documentation change, not an upgrade; the opt-ins in play belong recorded
+  in FLOCK.md; and the source line must not send an agent to a published spec
+  that predates the change it was sent to adopt.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first
