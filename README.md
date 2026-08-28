@@ -229,10 +229,10 @@ not the steps.
      spec's default words. Do not backfill finished work: a shipped
      feature's blueprint keeps its prose rounds, and the index gains no rows
      for done work.
-   - Before adding a §3.5 round list, check what task items the blueprint
-     already has: counting is file-wide, so a document whose Definition of
-     Done is a checklist will report those items mixed with the rounds, and
-     the number will be a lie. Report such a file instead of editing it.
+   - A §3.5 round list counts only under a heading named `Rounds` — put it
+     there, not under a house heading a tool will never find. Checklists
+     under other headings (a Definition of Done, say) are out of scope and
+     stay untouched.
    - Changed typical locations are defaults, not requirements: move and
      rename nothing — the Docs Map already declares the real paths.
    - Record in FLOCK.md which opt-ins are now in play, with the date. It is

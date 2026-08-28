@@ -187,8 +187,9 @@ own.
 
 ### 3.5 Round task list *(new in 0.3)*
 
-A blueprint MAY carry its rounds as a GFM task list — one task item per round, checked
-when the round closes, the same moment the worklog entry for that round is appended:
+A blueprint MAY carry its rounds as a GFM task list under a heading named `Rounds` —
+one task item per round, checked when the round closes, the same moment the worklog
+entry for that round is appended:
 
 ```markdown
 ## Rounds
@@ -200,10 +201,20 @@ when the round closes, the same moment the worklog entry for that round is appen
 The blueprint is the document that declares the rounds (§3), so it is the one place the
 total exists before the work starts.
 
-- A tool MAY read checked / total over the blueprint's task items as the unit's task
-  progress. Task items inside fenced code blocks do not count.
-- A blueprint with no task items declares no progress. That is not an error — it is an
-  older or hand-shaped blueprint (§6); the tool simply has no progress to show.
+The heading is the anchor, and it is fixed the way the §3.3 header and the §3.1 label
+names are: task lists are common in blueprints for other purposes — a Definition of
+Done is often a checklist — and a count over the whole file would sum unrelated things.
+Measured before this rule existed: in the standard's two source repositories, 111 of
+154 blueprints carried task items, almost all of them DoD checklists.
+
+- A tool reading task progress MUST count only the task items inside the `Rounds`
+  section — from that heading (matched case-insensitively, at any level) to the next
+  heading of the same or a higher level. Task items inside fenced code blocks do not
+  count; task items under subheadings within the section do.
+- A blueprint with no `Rounds` section declares no progress. That is not an error — it
+  is an older or house-shaped blueprint (§6); the tool simply has no progress to show.
+  A checklist under any other heading means whatever its own heading says, and is none
+  of this section's business.
 - The list belongs to the author: a tool MUST NOT add, remove, or reorder items on its
   own. Checking an item off is a write a tool MAY offer, under the same review rule as
   §3.4 — the result stays uncommitted for a human to review.

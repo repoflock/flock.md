@@ -63,6 +63,17 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   from the blueprint makes two copies of one truth), and counting section headings
   (a heuristic that imposes a layout §3.2 only suggests). The `BLUEPRINT.md` template
   now shows the list heading its per-round sections.
+- §3.5 counting is anchored to a heading named `Rounds` (decided 2026-08-28, same
+  day — the first dogfood run caught the file-wide count lying): measured across the
+  standard's two source repositories, 111 of 154 blueprints carried task items and
+  almost all were Definition-of-Done checklists, so a whole-file count sums unrelated
+  things on most real repositories. The anchor follows the machine tier's existing
+  shape — the exact §3.3 header, the fixed §3.1 label names: data is declared, but
+  the anchors a tool finds data by are the spec's own tokens. Rejected: declaring the
+  section name in FLOCK.md (the motivating repo uses two different house names in the
+  same repository, so even a per-repo declaration cannot cover it), and counting the
+  first list in the file (the number silently changes meaning when an unrelated
+  checklist lands earlier in the document).
 - README: Quick start gains a fourth path — upgrading an existing adoption to a
   newer spec version (decided 2026-08-28). The agent prompt is deliberately
   version-agnostic: it reads the CHANGELOG gap rather than hard-coding a release,
