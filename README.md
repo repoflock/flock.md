@@ -204,15 +204,24 @@ not the steps.
    after repositories adopt it, so the number alone cannot tell you whether
    this repo has what the version now contains. Check the repo against that
    entry item by item; equal version numbers are not evidence of equal shape.
-2. If any tool consumes FLOCK.md (an app, a linter, a script), run it before
-   touching anything and record its numbers — how many documents it finds,
-   how many labels it parses, what the index resolves to. Run it again at
-   the end. Nothing it found before may go missing.
+2. Before touching anything, capture `git status --short`. Files already
+   modified or staged are someone's work in flight — out of scope no matter
+   where a later step points; skip them and name them in the closing report.
+   "The diff is the review" only holds if the reviewer can tell your diff
+   from theirs, so the report also lists exactly the files this pass touched.
+   Then, if any tool consumes FLOCK.md (an app, a linter, a script), run it
+   and record its numbers — how many documents it finds, how many labels it
+   parses, what the index resolves to. Run it again at the end. Nothing it
+   found before may go missing.
    Record whether what it finds is RIGHT, not only how much: a section that
    parses to garbage is a regression already present, and repairing it
-   belongs to this pass. And if something you adopt does not move those
-   numbers, say so explicitly and name what blocks it — an adoption the
-   consuming tool cannot see is a documentation change, not an upgrade.
+   belongs to this pass — though a wrong parse that a dated decision already
+   declares deliberate is recorded, not repaired. And if a machine-readable
+   shape you adopt does not move those numbers, say so explicitly and name
+   what blocks it — an adoption the consuming tool cannot see is a
+   documentation change, not an upgrade. Declaration-tier sections (a
+   Lifecycle, an opt-in record) are expected to move nothing; the report
+   just says so.
 3. Adopt what pays, and only that:
    - Sections or labels the spec now recommends: add them where a document
      gains them naturally. A declaration bump with no other edits is a
@@ -223,25 +232,36 @@ not the steps.
      use. When a house label blocks a machine-readable feature, skip the
      feature — and put the blocker on the closing report as a priced line,
      one per label: which label, which feature it blocks, how many files a
-     rename would touch, and whether a dated decision in this repo already
-     covers keeping it. Classify each line — a pure shape fix that changes
-     no word, versus a real rename — but act on neither: I decide per line,
-     and an approved rename then runs as its own pass, one label per batch
-     with the changed-file count asserted, never inside this upgrade.
+     rename would touch AND where the label is really governed — a repo
+     whose doc standard lives outside it (shared with siblings, declared in
+     its Docs Map) prices a rename across everything that standard rules,
+     not inside one repo — and whether a dated decision, in this repo or in
+     that standard, already covers keeping it. Classify each line — a pure
+     shape fix that changes no word, a real rename, or a label absent
+     outright, whose fix is an added line rather than a change — but act on
+     none of them: I decide per line, and an approved change then runs as
+     its own pass, one label per batch with the changed-file count asserted,
+     never inside this upgrade.
    - Opt-in machine-readable shapes (a §3.3 index header, §3.5 round task
-     lists) are adopted for work still in flight only. Read "in flight" from
-     the status vocabulary this repo declares in FLOCK.md, not from the
-     spec's default words. Do not backfill finished work: a shipped
-     feature's blueprint keeps its prose rounds, and the index gains no rows
-     for done work.
+     lists) are adopted for work still in flight only. Before adopting one,
+     trace the path the consuming tool reads it through: if a house label
+     severs that path (a house blueprint label means the tool never reaches
+     the blueprint, so a round list there is invisible), the shape is not
+     adoptable here — it goes on the priced list above, not into the
+     documents. Read "in flight" from the status vocabulary this repo
+     declares in FLOCK.md, not from the spec's default words. Do not
+     backfill finished work: a shipped feature's blueprint keeps its prose
+     rounds, and the index gains no rows for done work.
    - A §3.5 round list counts only under a heading named `Rounds` — put it
      there, not under a house heading a tool will never find. Checklists
      under other headings (a Definition of Done, say) are out of scope and
      stay untouched.
    - Changed typical locations are defaults, not requirements: move and
      rename nothing — the Docs Map already declares the real paths.
-   - Record in FLOCK.md which opt-ins are now in play, with the date. It is
-     the file whose job is to say what shape this repo is in.
+   - Record in FLOCK.md which opt-ins are now in play, with the date — and
+     which are deliberately not, each with its blocker. It is the file whose
+     job is to say what shape this repo is in, and "not in play, because X"
+     is shape too.
 4. Rewrite no history: dated decisions, SUPERSEDED blocks and finished
    documents stay byte-for-byte, and the status vocabulary stays the house
    one. Line-based edits only, keeping each file's own line endings.

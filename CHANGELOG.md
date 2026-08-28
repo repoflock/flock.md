@@ -111,6 +111,22 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   design, so a prompt must not be more aggressive than the spec it serves. The
   two prompts thereby become one mechanism: the upgrade produces the list that
   Phase 3 executes.
+  A second dogfood run (2026-08-28, on a repository whose adoption predates the
+  §3.5 additions by one day — the exact draft-gap case) confirmed the first
+  round's patches hold, and found the next layer: the working tree is not
+  assumed clean anymore (files someone else already modified are out of scope,
+  and the closing report names both them and the files the pass touched — "the
+  diff is the review" only works if the two diffs can be told apart); adopting
+  an opt-in shape now requires tracing the consuming tool's read path first,
+  since a house label can sever it and make the shape invisible — that
+  conflict between "adopt for in-flight work" and "skip what a label blocks"
+  previously had no tie-breaker; a priced line prices a rename where the label
+  is really governed, which for a repo sharing a doc standard with siblings is
+  across everything that standard rules; the classification gains a third kind
+  (label absent outright — an added line, not a change); declaration-tier
+  sections are expected to move no consumer numbers, so the report says so
+  instead of flagging them; and the opt-in record in FLOCK.md now names what
+  is deliberately NOT in play, with its blocker.
 - README: Quick start gains a third path — migrating an established docs system, for
   repositories whose conventions already live in an agent instruction file. Carries a
   phased agent prompt (read-only dry run with baseline numbers → truth-first
