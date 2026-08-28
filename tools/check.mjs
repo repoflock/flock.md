@@ -18,6 +18,7 @@
 import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // ── §1 declaration line ────────────────────────────────────────────────────
 // `> flock: 0.3 · profile: flow` — SHOULD, not MUST; an undeclared FLOCK.md
@@ -208,19 +209,25 @@ export function check(repo) {
   const { plan, kinds, hasDocsMap } = readPlan(text);
   if (!hasDocsMap) must.push('No `## Docs Map` section — the one thing the spec marks MUST (§2.1).');
   else {
-    const missing = [];
+    // §2.1 has no MUST that a Where path exists — a fresh adoption legitimately
+    // declares where documents WILL go, so a clean-but-absent path is a note.
+    // What does fail is a cell that is not a bare path or glob (an annotation
+    // glued on): that cell cannot resolve for any tool, ever, and the failure
+    // it causes downstream is silent — the shape the pilot migration hit.
+    const notes = [];
+    let unresolved = 0;
     for (const { kind, where } of kinds) {
       const rel = safeRel(where);
-      if (!rel) { missing.push(`${kind} → ${where} (outside the repository)`); continue; }
+      if (!rel) { unresolved++; notes.push(`${kind} → ${where} (outside the repository) — a fact a repo may declare, but no tool will follow it`); continue; }
       // A glob names a family; its directory is what can be checked to exist.
       const probe = rel.includes('*') ? dirname(rel.slice(0, rel.indexOf('*') + 1)) : rel;
-      if (!isFile(join(repo, probe)) && !isDir(join(repo, probe))) missing.push(`${kind} → ${where}`);
+      if (isFile(join(repo, probe)) || isDir(join(repo, probe))) continue;
+      unresolved++;
+      if (/\s/.test(rel)) must.push(`Where cell is not a bare path or glob: ${kind} → ${where} — a tool reads the cell literally, so the location does not resolve (§2.1).`);
+      else notes.push(`${kind} → ${where} — does not exist yet: a plan in a fresh adoption, a rotted path in a repo that has these documents`);
     }
-    out.push(`Docs Map: ${kinds.length} kind${kinds.length === 1 ? '' : 's'} declared${missing.length ? '' : ' · every Where resolves'}`);
-    for (const line of missing) {
-      if (line.includes('outside the repository')) out.push(`  note: ${line} — a fact a repo may declare, but no tool will follow it`);
-      else must.push(`Where cell does not resolve: ${line} — a tool reads it as a literal path (§2.1).`);
-    }
+    out.push(`Docs Map: ${kinds.length} kind${kinds.length === 1 ? '' : 's'} declared${unresolved ? '' : ' · every Where resolves'}`);
+    for (const line of notes) out.push(`  note: ${line}`);
   }
 
   const indexAbs = join(repo, plan.index);
@@ -301,8 +308,23 @@ function selfTest() {
   const d = check(join(root, 'd'));
   assert(d.must.length === 1 && d.must[0].includes('does not resolve'), `fixture d: the annotated Where cell must fail: ${JSON.stringify(d.must)}`);
 
+  // 4. Verbatim template copies into a fresh repository — the README's
+  //    Starting fresh path. The declared locations do not exist yet; they are
+  //    a plan, and a plan is a note, not a violation.
+  const examples = join(dirname(fileURLToPath(import.meta.url)), '..', 'examples');
+  write('e/FLOCK.md', readFileSync(join(examples, 'minimal', 'FLOCK.md'), 'utf8'));
+  write('e/README.md', '# Fresh\n');
+  const e = check(join(root, 'e'));
+  assert(e.must.length === 0, `fixture e: a fresh minimal-template copy must pass: ${JSON.stringify(e.must)}`);
+  assert(has(e, 'does not exist yet'), 'fixture e: planned locations must be named as notes');
+  write('f/FLOCK.md', readFileSync(join(examples, 'full', 'FLOCK.md'), 'utf8'));
+  write('f/docs/ROADMAP.md', '| Item | Target | Status | Docs |\n|---|---|---|---|\n');
+  const f = check(join(root, 'f'));
+  assert(f.must.length === 0, `fixture f: a fresh full-template copy with a seeded index must pass: ${JSON.stringify(f.must)}`);
+  assert(has(f, 'Machine-writable header (§3.3): present'), 'fixture f: the seeded index header must be detected');
+
   rmSync(root, { recursive: true, force: true });
-  if (process.exitCode !== 1) console.log('self-test: OK (4 fixtures)');
+  if (process.exitCode !== 1) console.log('self-test: OK (6 fixtures)');
 }
 
 // ── Entry ──────────────────────────────────────────────────────────────────
