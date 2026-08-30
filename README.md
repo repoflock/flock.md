@@ -52,7 +52,7 @@ Four paths in, one destination. Pick the row that describes your repository toda
 
 | Your repository today | Your path |
 |---|---|
-| Brand new — no documentation yet | [Starting fresh](#starting-fresh): copy a template, add one line. Serious development? Start from the full template — same section. |
+| Brand new — no documentation yet | [Starting fresh](#starting-fresh): copy a template, add one line — or hand your agent the setup prompt. Serious development? Start from the full template — same section. |
 | Has docs, but no system for them | [Already have docs](#already-have-docs): declare where they live — nothing moves. |
 | Already runs a docs system — conventions in `AGENTS.md`/`CLAUDE.md`, doc maps in READMEs | [Migrating an established docs system](#migrating-an-established-docs-system): hand your agent the phased prompt. |
 | Already on Flock, and the spec has moved on | [Upgrading to a newer spec version](#upgrading-to-a-newer-spec-version): hand your agent the upgrade prompt. |
@@ -99,9 +99,48 @@ checker reads a clean path that does not exist yet as a plan, not a violation. N
 the project will grow that way? Starting core costs nothing later — graduating to the
 flow profile is additive ([Growing later](#growing-later)).
 
-No agent prompt for this case — copying one file and adding one line is less work than
-handing it off. The prompts below are for repositories that already have documents to
-declare.
+Handing it to an agent instead? Copying one file and adding one line is genuinely less
+work than reading a prompt about it — but if you are already working through an agent,
+saying so once is the shorter path. The guardrails matter more than the steps here: the
+failure this prompt exists to prevent is a fresh-repo setup running in a repository that
+is not fresh.
+
+```text
+Read https://github.com/repoflock/flock.md and set this repository up to follow
+the standard. This is a fresh repository — nothing to inventory — so it is a
+setup, not a migration.
+
+1. Check that premise before anything else. If this repo already has
+   documentation — a docs directory, design notes, a roadmap, or conventions
+   living inside an agent instruction file — stop and tell me: "Already have
+   docs" and "Migrating an established docs system" in that README are the
+   paths that fit, and running this one would declare a map that does not
+   describe the repository. If a FLOCK.md already exists, stop there too;
+   adopting must never overwrite one.
+2. Copy examples/minimal/FLOCK.md to FLOCK.md at the repository root, as
+   shipped. Do not rewrite its Docs Map to match what you imagine this project
+   will need — in a fresh repository those defaults are a plan, and the plan is
+   the adoption. Use examples/full/FLOCK.md instead only if I have told you this
+   project is headed for full design-to-delivery development; if you do, also
+   create the index file its Index section names, containing the §3.3 header
+   row and its separator and nothing else.
+3. Add this line to the instruction file this repository keeps for agents —
+   AGENTS.md, CLAUDE.md, .cursorrules, whichever is here. If none is, create the
+   one your own tool reads and put the line in it:
+   Docs and project conventions: see FLOCK.md.
+4. Create nothing else. No placeholder documents, no empty directories for the
+   paths the Docs Map names — those come into existence with the first real
+   document, and a checker reads a declared path that does not exist yet as a
+   plan, not a violation.
+5. Verify if you can: node tools/check.mjs <this repo>, run from a checkout of
+   the standard. A fresh adoption reports the declared kinds, zero documents,
+   and no MUST violations — and a note on each declared path that does not
+   exist yet, which is the plan, not a finding. On the minimal template the
+   index line reads "not found" for the same reason. Do not "fix" any of that
+   by writing documents or seeding files; zero is the correct count on day one.
+6. Leave everything uncommitted. Tell me what you created and which profile you
+   used.
+```
 
 ### Already have docs
 

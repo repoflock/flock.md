@@ -147,6 +147,26 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   may be revisited if repos grow rich house checks); and the path-existence
   floor as the only answer (measured across two dogfood runs: every real
   defect surfaced through a consumer run, none through path existence).
+- README: *Starting fresh* gains an agent prompt too (decided 2026-08-28), superseding
+  that section's own "no agent prompt for this case — copying one file and adding one
+  line is less work than handing it off". The reasoning held for the work and missed the
+  reader: someone already working through an agent does not do the two steps by hand
+  either way, so the choice was never between a prompt and one file — it was between a
+  guardrailed prompt and an improvised one. The guardrails are the payload, not the two
+  steps: refuse a repository that is not fresh (the "already have docs" and migration
+  paths exist for it) or that already has a `FLOCK.md` (§3.4 forbids overwriting one);
+  copy the template as shipped rather than rewriting the Docs Map to a guess about the
+  project; create no placeholder documents or empty directories for declared paths,
+  since a clean path that does not exist yet is a plan; and do not "fix" a fresh
+  adoption's zero document count by writing documents. Every prompt in this README now
+  carries the failure it exists to prevent, and this one's is the paste-in-the-wrong-repo
+  case that the four-path Quick start makes easy to hit. Dogfooded before publishing by
+  running the checker against both templates copied into empty directories, which is
+  what put the last clause in: a fresh core adoption reports its index as `not found`,
+  because the minimal template's Index section names a file day one has no reason to
+  contain — the same plan-not-violation case the Docs Map paths get a friendly note for.
+  The prompt names that line so an agent reads it as expected output instead of a defect
+  to repair; the asymmetry in how the checker phrases the two is left as it is for now.
 - README: the approved rename gets its own prompt — "Running an approved label rename"
   (decided 2026-08-28). The priced-list mechanism previously ended at "approved
   renames run under the migration prompt's Phase 3 discipline", which left the
