@@ -126,6 +126,13 @@ under the H1 title. Recognized labels:
 | `**Feature:**` | blueprint, worklog | Link back to the feature document |
 | `**Blueprint:**` / `**Worklog:**` | feature | Links completing three-way linking; `—` until the file exists |
 
+The `**Target:**` value SHOULD hold the version or milestone alone. A tool organizes
+work by the exact value string — the §3.3 index column carries the same short code —
+so a qualification glued to the value turns a per-version view into one group per
+document. Qualifications and history belong on a line of their own below the label,
+or in the body; a document whose aim cannot be stated as a short value SHOULD omit
+the label rather than carry an invented one.
+
 A document MAY carry additional labels. A tool MUST ignore labels it does not recognize,
 and MUST NOT remove them.
 

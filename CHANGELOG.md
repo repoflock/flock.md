@@ -194,6 +194,18 @@ Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conformi
   never verify by eye when a consuming tool exists, count inbound references before
   moving a section, declare the house status vocabulary rather than rewriting
   documents to the default one.
+- §3.1: the `**Target:**` value SHOULD hold the version or milestone alone (decided
+  2026-08-31) — qualifications move to a line of their own or into the body, and a
+  document whose aim cannot be stated as a short value omits the label rather than
+  carrying an invented one. The same lesson §2.1's Where cell already recorded, met
+  one label over: measured on the standard's largest source adoption, 105 of 131
+  feature documents carried a clause after the version — replan history, tier
+  breakdowns, prose — so a tool grouping by Target would have drawn dozens of groups
+  of one. The README's approved-rename prompt had already priced exactly this failure
+  and normalizes values as it renames; the spec now states the rule that prompt was
+  enforcing, so a repository writing its first `Target:` line does not need a rename
+  pass to learn it. The `FEATURE.md` template's placeholder says "the short code
+  alone" accordingly.
 
 ## 0.2.0 — draft (unreleased)
 

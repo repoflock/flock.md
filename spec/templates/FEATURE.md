@@ -1,7 +1,7 @@
 # <Name> — <what it is, in one clause>
 
 **Status:** Design <YYYY-MM-DD>
-**Target:** <version or milestone — optional, delete if unused>
+**Target:** <version or milestone, the short code alone — optional, delete if unused>
 **Brd:** <link to the brd this descends from — optional, delete if unused>
 **Blueprint:** —
 **Worklog:** —
