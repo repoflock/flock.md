@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.3 · profile: flow
+> flock: 0.4 · profile: flow
 
 ## Docs Map
 
@@ -11,6 +11,7 @@
 | blueprint | `docs/blueprint/` | How exactly will it be built? |
 | worklog | `docs/worklog/` | What actually happened while building? |
 | index | [docs/ROADMAP.md](docs/ROADMAP.md) | What exists, in what state? |
+| shipped | [docs/SHIPPED.md](docs/SHIPPED.md) | What shipped, in which version? Rows the index released (spec §3.6) |
 
 ## Lifecycle
 
@@ -27,7 +28,9 @@ unused.
 
 [docs/ROADMAP.md](docs/ROADMAP.md) — one line per item, machine-writable
 (spec §3.3): `| Item | Target | Status | Docs |`. Detail lives in the docs, never in
-the index.
+the index. Rows leave when their version is released — to
+[docs/SHIPPED.md](docs/SHIPPED.md), same columns, one heading per version (spec §3.4
+Release). Delete the `shipped` row above if finished work is to stay in the index.
 
 ## Status Labels
 

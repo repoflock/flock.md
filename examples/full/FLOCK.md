@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.3 · profile: flow
+> flock: 0.4 · profile: flow
 
 ## Docs Map
 
@@ -11,6 +11,7 @@
 | blueprint | `docs/blueprint/` | How exactly will it be built? |
 | worklog | `docs/worklog/` | What actually happened while building? |
 | index | [docs/ROADMAP.md](docs/ROADMAP.md) | What exists, in what state? |
+| shipped | [docs/SHIPPED.md](docs/SHIPPED.md) | What shipped, in which version? Rows the index released |
 | technical | `docs/technical/` | How does the system work today? |
 | business | `docs/business/` | How does this make money, and for whom? |
 
@@ -31,7 +32,9 @@ chain fixes the lifecycle, not the whole map.
 
 [docs/ROADMAP.md](docs/ROADMAP.md) — one line per feature, machine-writable
 ([spec §3.3](https://github.com/repoflock/flock.md/blob/main/spec/SPEC.md#33-machine-writable-index-new-in-02)):
-`| Item | Target | Status | Docs |`. Detail lives in the docs, never in the index.
+`| Item | Target | Status | Docs |`. Detail lives in the docs, never in the index, and
+finished rows do not stay: when a version is released they move verbatim to
+[docs/SHIPPED.md](docs/SHIPPED.md) ([spec §3.6](https://github.com/repoflock/flock.md/blob/main/spec/SPEC.md#36-shipped-ledger-new-in-04)).
 
 ## Status Labels
 

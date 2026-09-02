@@ -3,6 +3,58 @@
 Spec versions follow [SemVer](https://semver.org). While in `0.x`, minor versions may
 change the spec incompatibly.
 
+## 0.4.0 — draft (unreleased)
+
+Theme: close the chain. The index gains an exit. Everything is SHOULD/MAY; 0.3
+adoptions remain conforming, and one that declares no ledger changes nothing.
+
+- The lifecycle had an entry and no exit (decided 2026-09-02): §3.4 Open and Advance
+  put rows into the index, and nothing took one out, while §2.2 defined the index as
+  "ongoing and planned work". Measured on the standard's largest source adoption the
+  day the rule was written: 173 index rows, 137 finished, 98 of those shipped in a
+  tagged release, the file at 112 KB — one month after a character-ceiling lint had
+  compressed it from 82 KB to 36 KB. Short cells did not help, because the number of
+  dead rows never went down; and the section holding 100 of the finished rows was
+  headed "designed, not yet built". The gap is the spec's, not the adopter's
+  discipline: any adoption that lives long enough arrives there.
+- §3.6 **Shipped ledger**: a Docs Map kind `shipped`, one file, same columns as the
+  index, one heading per released version carrying the version and its date. Rows are
+  moved in, never deleted, never rewritten (§4 applies). Typical location
+  `docs/SHIPPED.md`; a declared ledger that does not exist yet is a plan.
+- §3.4 fourth transition **Release** *(finished → shipped)*: when a version is
+  released, every index row that is finished and aimed at that version moves verbatim to
+  the ledger. The trigger is the release — tag or published build — not the finished
+  Status: a finished row for an unreleased version is still that release's open
+  business, and its release gate reads it. The move touches no linked document.
+- §2.2 now says what §3.4 makes true: the index is for work that has not shipped.
+  Without a declared ledger, finished rows stay — the 0.1–0.3 shape, conforming.
+- §3.3: a finished document with no index row is a released row or an unbackfilled
+  one, not a missing one — a tool MUST NOT append a row for a finished document.
+- Rejected (decided 2026-09-02): one ledger file per version — the per-version index
+  the 0.3 entry already declined, renamed; a `## Shipped` section inside the index —
+  the PEP 0 shape keeps the record but not the size, and size is what an agent pays for
+  every read (the source adoption had tried "one file, compressed" and tripled in
+  thirty days); and leaving it to tools to filter — the reference implementation
+  already filters its overview by version, and the file was still 112 KB for every
+  human and agent reading it raw. What the long-lived precedents share — Keep a
+  Changelog's Unreleased section, project boards' archive-on-close, sprint boards
+  clearing Done — is a trigger tied to the delivery rhythm, a row that is not lost,
+  and a place of its own.
+- Design note: Release moves index rows only. The reference implementation reads
+  status from feature documents, not from the index, so the ledger changes nothing a
+  tool computes; and the documents stay where the Docs Map says, so the eighty inbound
+  links measured on the source adoption keep resolving (one of them targeted a
+  section anchor; none targeted a row).
+- Versioning (decided 2026-09-02): this went into a new minor rather than the open 0.3
+  draft. Three repositories already declared 0.3; growing the draft under them once
+  more would be the third "same number, different shape" gap the upgrade prompt has
+  to special-case, and the change reads a core-profile section differently. 0.3 was
+  frozen and tagged the same day. Cost of the bump: nothing — no adopter outside the
+  standard's own repositories, nothing promoted.
+- `examples/full` gains `docs/SHIPPED.md` holding the row the index example used to
+  show as `Done 1.0`; the `FLOCK_FLOW.md` template gains the `shipped` row with a note
+  to delete it if finished work is to stay.
+
 ## 0.3.0 — 2026-09-02
 
 Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conforming.

@@ -1,6 +1,6 @@
 # The Flock Standard — Specification
 
-**Version 0.3.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
+**Version 0.4.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
 spec is still evolving and minor versions may break.
 
 The key words MUST, SHOULD, and MAY are to be interpreted as described in
@@ -16,7 +16,7 @@ The key words MUST, SHOULD, and MAY are to be interpreted as described in
 
   ```markdown
   # FLOCK.md
-  > flock: 0.3 · profile: core
+  > flock: 0.4 · profile: core
   ```
 
 - Paths in `FLOCK.md` are relative to the repository root.
@@ -53,6 +53,14 @@ and planned work, one line per item, each line linking to the relevant document.
 index only answers "what exists, in what state, where do I read more." Keeping index
 entries short is what keeps the index readable by both humans and agents.
 
+**The index is for work that has not shipped.** A line whose work has shipped in a
+released version SHOULD leave the index — it moves, verbatim, to the shipped ledger
+(§3.6) when the repository declares one. A repository that declares no ledger keeps
+its finished lines in the index; that is a conforming 0.1–0.3 shape, not an error.
+Short entries keep the index readable; leaving is what keeps it short — measured before
+this rule existed, the standard's largest source adoption had 137 of 173 index lines
+finished, 98 of them shipped in a tagged release, and the file at 112 KB.
+
 ### 2.3 Status Labels (recommended)
 
 `FLOCK.md` SHOULD contain a `## Status Labels` section declaring the vocabulary used to
@@ -87,7 +95,9 @@ The chain fixes the **Type** vocabulary of the lifecycle kinds:
 | *Where?* | `index` | What exists, in what state? | `docs/ROADMAP.md` |
 
 The chain fixes the lifecycle, not the whole map: kinds outside the chain
-(`technical`, `business`, …) MAY be declared as additional Docs Map rows. Typical
+(`technical`, `business`, …) MAY be declared as additional Docs Map rows. One such kind
+has a fixed name because a tool writes to it: `shipped`, the ledger the index releases
+finished rows into (§3.6). Typical
 locations are defaults, not requirements — the Docs Map declares the actual path, so
 a repo already using, say, `docs/blueprints/` stays conforming without renaming.
 
@@ -170,9 +180,15 @@ the document's Status changes. If the index contains no such table, the tool MUS
 guess where to write — it SHOULD hand the formatted row to a human to place. A richer,
 hand-maintained index is still conforming; machine-writability is opt-in.
 
+A finished document with no row in the index is not a missing row: its row has been
+released to the shipped ledger (§3.6), or the adoption never backfilled it (§3.4). A
+tool MUST NOT append a row for a document whose Status is a finished label. A document
+that reopens after shipping is rare enough to hand to a human, under the same rule as a
+missing table.
+
 ### 3.4 Stage transitions *(new in 0.2)*
 
-Three transitions are common enough to name, so tools can offer them:
+Four transitions are common enough to name, so tools can offer them:
 
 - **Adopt** *(no `FLOCK.md` → core or flow)*: create `FLOCK.md` at the repository root
   from the matching profile template. For the flow profile, also create the index file
@@ -187,6 +203,14 @@ Three transitions are common enough to name, so tools can offer them:
 - **Advance** *(`Design` → `Building`)*: create the blueprint and worklog from their
   templates, complete the three-way links, and update Status in both the feature
   document and the index.
+- **Release** *(finished → shipped, new in 0.4)*: when a version is released, move every
+  index row whose Status is a finished label and whose Target is that version, verbatim,
+  from the index to the shipped ledger (§3.6), under the heading for that version. The
+  trigger is the release — the tag, the published build — not the Status alone: a
+  finished row aimed at an unreleased version is still that release's open business.
+  The transition MUST NOT alter a row it moves, and MUST NOT touch the documents the row
+  links to; they stay where the Docs Map says they are. A repository that declares no
+  ledger has no Release transition.
 
 A tool performing any of these transitions SHOULD leave the results as uncommitted
 changes for a human to review, and MUST NOT overwrite an existing file or commit on its
@@ -227,6 +251,30 @@ Measured before this rule existed: in the standard's two source repositories, 11
   §3.4 — the result stays uncommitted for a human to review.
 - The list MAY stand alone or head a set of per-round sections; the template (§3.2)
   shows the combined shape.
+
+### 3.6 Shipped ledger *(new in 0.4)*
+
+The index has an entry — Open — and needs an exit, or every adoption that lives long
+enough ends up with an index that is mostly finished work under a heading that says
+otherwise. The exit is a **shipped ledger**: one file, declared as a Docs Map row of kind
+`shipped`, holding the rows the index has released (§3.4).
+
+- The ledger SHOULD use the same columns as the index it receives rows from, so a row
+  moves verbatim — the ledger is the index's past, not a second index.
+- Rows SHOULD sit under one heading per released version, newest first, the heading
+  carrying the version and its release date: `## 1.0 — 2026-08-21`.
+- A ledger is history in the sense of §4: rows are moved into it, never deleted from it,
+  and never rewritten there. A correction to a shipped row is a dated note beside it.
+- The ledger is one file. Rejected (decided 2026-09-02): one ledger file per version —
+  that is the per-version index the standard already declined, under another name; and
+  a `## Shipped` section inside the index — it keeps the record but not the size, and
+  the size is what an agent pays for every time it reads the index.
+- Typical location `docs/SHIPPED.md`; as with every kind, the Docs Map declares the
+  actual path. A declared ledger that does not exist yet is a plan, not a violation —
+  the first Release creates it.
+
+A tool MAY read the ledger to show shipped work per version; it MUST NOT treat a row's
+absence from the index as a document's absence from the repository.
 
 ## 4. History conventions
 
@@ -284,6 +332,6 @@ must be survivable rather than fatal.
 |---|---|
 | **Core** | `FLOCK.md` at root · Docs Map section |
 | **Flow** | Core, plus the §3 kind vocabulary, linking rules, and the `## Lifecycle` / `## Conventions` sections |
-| **Flow, machine-writable** *(opt-in)* | Flow, plus the §3.1 label block and a §3.3 index table |
+| **Flow, machine-writable** *(opt-in)* | Flow, plus the §3.1 label block and a §3.3 index table; a §3.6 shipped ledger if the index is to have an exit |
 
 Everything not marked MUST is guidance: adopt what earns its keep.

@@ -2,10 +2,12 @@
 
 > One file that tells humans **and** AI agents where a repo's knowledge lives — and how work flows through it.
 
-**Status: v0.3 — draft.** The spec is small on purpose and still settling. v0.3 names
-the question chain — **Why → What → How → What happened** — that the flow profile has
-always encoded; v0.2 added document templates and an opt-in machine-writable index —
-tool-friendly, never tool-required. Feedback is welcome via issues.
+**Status: v0.4 — draft.** The spec is small on purpose and still settling. v0.4 gives
+the index an exit — finished rows leave for a shipped ledger when their version is
+released; v0.3 named the question chain — **Why → What → How → What happened** — that
+the flow profile has always encoded; v0.2 added document templates and an opt-in
+machine-writable index — tool-friendly, never tool-required. Feedback is welcome via
+issues.
 
 ## The problem
 
