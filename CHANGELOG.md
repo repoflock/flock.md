@@ -3,7 +3,7 @@
 Spec versions follow [SemVer](https://semver.org). While in `0.x`, minor versions may
 change the spec incompatibly.
 
-## 0.3.0 — draft (unreleased)
+## 0.3.0 — 2026-09-02
 
 Theme: name the chain. Nothing structural changes; 0.2 adoptions remain conforming.
 
