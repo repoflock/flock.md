@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.4 · profile: flow
+> flock: 0.4
 
 ## Docs Map
 

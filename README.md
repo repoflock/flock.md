@@ -4,8 +4,9 @@
 
 **Status: v0.4 — draft.** The spec is small on purpose and still settling. v0.4 gives
 the index an exit — finished rows leave for a shipped ledger when their version is
-released; v0.3 named the question chain — **Why → What → How → What happened** — that
-the flow profile has always encoded; v0.2 added document templates and an opt-in
+released — and drops the core/flow profiles: one template, one shape, declare what is
+in play; v0.3 named the question chain — **Why → What → How → What happened** — that
+the standard has always encoded; v0.2 added document templates and an opt-in
 machine-writable index — tool-friendly, never tool-required. Feedback is welcome via
 issues.
 
@@ -32,13 +33,14 @@ A single markdown file, `FLOCK.md`, at the repository root. It declares:
 4. **Conventions** — the history rules: decisions carry dates, reversals are patched
    in place and marked `SUPERSEDED`, rejected alternatives are recorded.
 
-Plain GitHub-flavored Markdown. No schema, no tooling, no lock-in. A repo adopts the
-core profile in five minutes; readers and agents get a stable entry point forever.
+Plain GitHub-flavored Markdown. No schema, no tooling, no lock-in. Only the Docs Map
+is required; a repo declares it in five minutes, and readers and agents get a stable
+entry point forever.
 
 ## The question chain
 
-In the full [flow profile](spec/SPEC.md#3-the-flow-profile), a unit of work is done
-when four questions have written answers, in order:
+In the [lifecycle](spec/SPEC.md#3-the-lifecycle) the standard is built around, a unit
+of work is done when four questions have written answers, in order:
 
 > **Why?** → `brd` · **What?** → `feature` · **How?** → `blueprint` ·
 > **What happened?** → `worklog`
@@ -54,7 +56,7 @@ Four paths in, one destination. Pick the row that describes your repository toda
 
 | Your repository today | Your path |
 |---|---|
-| Brand new — no documentation yet | [Starting fresh](#starting-fresh): copy a template, add one line — or hand your agent the setup prompt. Serious development? Start from the full template — same section. |
+| Brand new — no documentation yet | [Starting fresh](#starting-fresh): copy the example, seed the index, add one line — or hand your agent the setup prompt. |
 | Has docs, but no system for them | [Already have docs](#already-have-docs): declare where they live — nothing moves. |
 | Already runs a docs system — conventions in `AGENTS.md`/`CLAUDE.md`, doc maps in READMEs | [Migrating an established docs system](#migrating-an-established-docs-system): hand your agent the phased prompt. |
 | Already on Flock, and the spec has moved on | [Upgrading to a newer spec version](#upgrading-to-a-newer-spec-version): hand your agent the upgrade prompt. |
@@ -66,40 +68,36 @@ line in your agent instruction file — and `node tools/check.mjs <repo>` to con
 ### Starting fresh
 
 A repository with no documentation yet has nothing to inventory and nothing to fill in —
-the template's defaults **are** the adoption:
+the example's defaults **are** the adoption:
 
-1. Copy [`examples/minimal/FLOCK.md`](examples/minimal/FLOCK.md) to your repo root, as
-   shipped. Its Docs Map declares the spec's typical locations, and in a fresh repo those
-   are not a description but a plan: the first design note goes in `docs/`, the first
-   decision in `docs/decisions/`, and the map was true before either existed.
-2. Add one line to your agent instruction file (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`):
+1. Copy [`examples/FLOCK.md`](examples/FLOCK.md) to your repo root, as shipped. Its
+   Docs Map declares the spec's typical locations, and in a fresh repo those are not a
+   description but a plan: the first feature doc goes in `docs/feature/`, its blueprint
+   in `docs/blueprint/`, and the map was true before either existed. The lifecycle's
+   real cost is backfill, and a fresh repository has nothing to backfill: day one is the
+   one moment it is free, and every feature enters the index born linked.
+2. Seed the index file the example names, so the first feature has somewhere to land
+   (§3.4):
+
+   ```markdown
+   <!-- docs/ROADMAP.md -->
+   | Item | Target | Status | Docs |
+   |---|---|---|---|
+   ```
+
+3. Add one line to your agent instruction file (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`):
 
    ```text
    Docs and project conventions: see FLOCK.md.
    ```
 
-Done — that is a valid core-profile adoption, and the pointer line is the half that does
-the work: an agent has never heard of a standard this new, so it finds `FLOCK.md` through
-a file it already reads — and from then on it writes documents where the map says, from
-day one. Edit the map when reality diverges from the defaults, not before.
-
-**Fresh and serious?** If the project is headed for real design-to-delivery development —
-features that deserve a design before the build and a record after it — start from
-[`examples/full/FLOCK.md`](examples/full/FLOCK.md) instead. The flow profile's real cost
-is backfill, and a fresh repository has nothing to backfill: day one is the one moment
-the full flow is free, and every feature enters the index born linked. One extra step —
-seed the index file the template names, so the first feature has somewhere to land (§3.4):
-
-```markdown
-<!-- docs/ROADMAP.md -->
-| Item | Target | Status | Docs |
-|---|---|---|---|
-```
-
-The other declared directories come into existence with the documents themselves; the
-checker reads a clean path that does not exist yet as a plan, not a violation. Not sure
-the project will grow that way? Starting core costs nothing later — graduating to the
-flow profile is additive ([Growing later](#growing-later)).
+Done — and the pointer line is the half that does the work: an agent has never heard of
+a standard this new, so it finds `FLOCK.md` through a file it already reads — and from
+then on it writes documents where the map says, from day one. The other declared
+directories come into existence with the documents themselves; the checker reads a clean
+path that does not exist yet as a plan, not a violation. Edit the map when reality
+diverges from the defaults, not before — a row for a kind the project turns out not to
+have is deleted, not filled.
 
 Handing it to an agent instead? Copying one file and adding one line is genuinely less
 work than reading a prompt about it — but if you are already working through an agent,
@@ -119,13 +117,11 @@ setup, not a migration.
    paths that fit, and running this one would declare a map that does not
    describe the repository. If a FLOCK.md already exists, stop there too;
    adopting must never overwrite one.
-2. Copy examples/minimal/FLOCK.md to FLOCK.md at the repository root, as
-   shipped. Do not rewrite its Docs Map to match what you imagine this project
-   will need — in a fresh repository those defaults are a plan, and the plan is
-   the adoption. Use examples/full/FLOCK.md instead only if I have told you this
-   project is headed for full design-to-delivery development; if you do, also
-   create the index file its Index section names, containing the §3.3 header
-   row and its separator and nothing else.
+2. Copy examples/FLOCK.md to FLOCK.md at the repository root, as shipped. Do
+   not rewrite its Docs Map to match what you imagine this project will need —
+   in a fresh repository those defaults are a plan, and the plan is the
+   adoption. Create the index file its Index section names, containing the
+   §3.3 header row and its separator and nothing else.
 3. Add this line to the instruction file this repository keeps for agents —
    AGENTS.md, CLAUDE.md, .cursorrules, whichever is here. If none is, create the
    one your own tool reads and put the line in it:
@@ -137,11 +133,9 @@ setup, not a migration.
 5. Verify if you can: node tools/check.mjs <this repo>, run from a checkout of
    the standard. A fresh adoption reports the declared kinds, zero documents,
    and no MUST violations — and a note on each declared path that does not
-   exist yet, which is the plan, not a finding. On the minimal template the
-   index line reads "not found" for the same reason. Do not "fix" any of that
-   by writing documents or seeding files; zero is the correct count on day one.
-6. Leave everything uncommitted. Tell me what you created and which profile you
-   used.
+   exist yet, which is the plan, not a finding. Do not "fix" any of that by
+   writing documents; zero is the correct count on day one.
+6. Leave everything uncommitted. Tell me what you created.
 ```
 
 ### Already have docs
@@ -157,17 +151,19 @@ the Docs Map declares your real paths — so nothing moves:
 
 That is the whole adoption: one new file, one pointer line, zero moved files. The
 history conventions apply from adoption day forward — do not backfill dates or
-`SUPERSEDED` marks into old documents. If you graduate to the flow profile later, start
-the index with new work rather than backfilling every finished feature: a backfilled
-table is too large to verify, and an index that might be wrong is worse than a shorter
-one that is right.
+`SUPERSEDED` marks into old documents. If you take up the lifecycle later, start the
+index with new work rather than backfilling every finished feature: a backfilled table
+is too large to verify, and an index that might be wrong is worse than a shorter one
+that is right.
 
 Handing adoption to an agent? This prompt carries the guardrails:
 
 ```text
 Read https://github.com/repoflock/flock.md and adopt the standard in this repository:
 
-1. Create FLOCK.md at the repo root, starting from examples/minimal/FLOCK.md.
+1. Create FLOCK.md at the repo root with three sections — Docs Map, Index,
+   Status Labels — in the shape of examples/FLOCK.md, keeping only what this
+   repository actually has.
 2. Fill in the Docs Map from the documentation that already exists here — do not
    invent sections for documents we do not have.
 3. Add this line to AGENTS.md — or to whichever instruction file this repo
@@ -457,12 +453,6 @@ It prints what a tool can read from the adoption — kinds declared, labels pars
 where the index resolves, §3.5 round counts — and fails only on MUST violations;
 everything else the spec leaves as guidance, and the checker holds itself to that
 line. `--self-test` runs it against the shapes real adoptions have taught it.
-
-### Growing later
-
-When your project grows into a full design-to-delivery flow, graduate to the
-[flow profile](spec/SPEC.md#3-the-flow-profile): see
-[`examples/full/FLOCK.md`](examples/full/FLOCK.md).
 
 ## FLOCK.md and AGENTS.md
 

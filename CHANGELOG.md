@@ -5,8 +5,45 @@ change the spec incompatibly.
 
 ## 0.4.0 — draft (unreleased)
 
-Theme: close the chain. The index gains an exit. Everything is SHOULD/MAY; 0.3
-adoptions remain conforming, and one that declares no ledger changes nothing.
+Theme: close the chain, and one shape. The index gains an exit; the core/flow profiles
+go. Everything is SHOULD/MAY; 0.3 adoptions remain conforming — a `profile:` field on
+the declaration line is ignored, not an error — and one that declares no ledger changes
+nothing.
+
+- **Profiles dropped** (decided 2026-09-10). 0.1–0.3 offered two: `core` (Docs Map,
+  Index, Status Labels) and `flow` (core plus the chain, three-way linking, `## Lifecycle`
+  and `## Conventions`), named on the declaration line. Now there is one shape: the Docs
+  Map is the only MUST (§2.1), `## Conventions` is recommended for every adoption
+  (§2.4, new — §4 always bound every adoption; the section is where a repo says so), and
+  a repository declares in `## Lifecycle` whether it runs the chain (§3). The declaration
+  line names the version alone (§1). The reasoning: a profile is a promise about shape,
+  and the standard is deliberately loose about shape — the Docs Map already declares
+  what exists, and everything past it is guidance. Measured on the day: every adoption
+  made with the standard had declared `flow` and then said, row by row and in prose,
+  which parts were in play; the field never told a tool anything the file did not, and
+  no tool branched on it (neither the checker nor the reference implementation). What
+  it cost: a second template, a second example, a branch in the fresh-repo prompt, a
+  "which profile" question in the adoption dialog of the reference implementation —
+  and a second name to explain to every newcomer.
+- Rejected with it: keeping `core` as an unadvertised conformance floor (a name nobody
+  is told to use is a name nobody understands on meeting it — and the floor exists
+  without the name: it is §2.1); and a third or per-kind profile for repositories that
+  run a different lifecycle (the `## Lifecycle` section declares one in prose, which is
+  where a loose standard keeps things it does not fix).
+- Consequences in the repository: `spec/templates/FLOCK_FLOW.md` → `FLOCK.md`,
+  `FLOCK_CORE.md` deleted; `examples/minimal/` deleted, `examples/full/` flattened to
+  `examples/` (one example needs no qualifier). README Quick start: Starting fresh is
+  one path (copy the example, seed the index, add the pointer line) — the "fresh and
+  serious" fork that pointed at the full example was the only fork, and it always won;
+  "Already have docs" builds the three sections rather than copying a template that
+  carried a lifecycle the repository may not run; the Growing later section is gone
+  with the thing it grew into. §3.4 Adopt says what "declarative" means for a template
+  row the repository has no documents for: delete it, do not fill it. The checker drops
+  the profile field on read and asserts so on a 0.3-shaped fixture.
+- Versioning: into the open 0.4 draft rather than a 0.5, because 0.4 is unpublished and
+  its one adoption is the reference implementation's own repository, upgraded in the
+  same pass. The standard's own `FLOCK.md` — the single `core` adoption that existed —
+  now says in prose that it runs no lifecycle.
 
 - The lifecycle had an entry and no exit (decided 2026-09-02): §3.4 Open and Advance
   put rows into the index, and nothing took one out, while §2.2 defined the index as

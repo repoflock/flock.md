@@ -1,6 +1,6 @@
 # Shipped
 
-Ledger for the [flow-profile example](../FLOCK.md) — the rows [ROADMAP.md](ROADMAP.md)
+Ledger for the [example adoption](../FLOCK.md) — the rows [ROADMAP.md](ROADMAP.md)
 released, verbatim, one heading per released version, newest first
 ([spec §3.6](../../../spec/SPEC.md#36-shipped-ledger-new-in-04)). Rows arrive by the
 §3.4 Release transition and are never edited here; a correction is a dated note beside

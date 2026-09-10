@@ -1,16 +1,18 @@
 # FLOCK.md
 
-> flock: 0.4 · profile: core
+> flock: 0.4
 
-This repository hosts the Flock standard and follows it.
+This repository hosts the Flock standard and follows it. It runs no lifecycle — a spec
+has no features to design and build — so there is no `## Lifecycle` section; the Docs
+Map is the adoption.
 
 ## Docs Map
 
 | Type | Where | Answers |
 |---|---|---|
 | spec | [spec/SPEC.md](spec/SPEC.md) | What does a conforming repo look like? |
-| template | [spec/templates/](spec/templates/) | What skeleton does a new flow document start from? |
-| example | [examples/](examples/) | What does an adoption look like, minimal and full? |
+| template | [spec/templates/](spec/templates/) | What skeleton does a new document start from? |
+| example | [examples/](examples/) | What does an adoption look like? |
 | overview | [README.md](README.md) | What is this and why does it exist? |
 | changelog | [CHANGELOG.md](CHANGELOG.md) | What changed between spec versions? |
 

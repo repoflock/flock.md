@@ -1,6 +1,6 @@
 # Roadmap
 
-Index for the [flow-profile example](../FLOCK.md) — one line per item, machine-writable
+Index for the [example adoption](../FLOCK.md) — one line per item, machine-writable
 ([spec §3.3](../../../spec/SPEC.md#33-machine-writable-index-new-in-02)). Detail lives
 in the linked documents, never here. The linked documents are illustrative and not part
 of this example.

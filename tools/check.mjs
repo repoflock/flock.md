@@ -21,9 +21,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // ── §1 declaration line ────────────────────────────────────────────────────
-// `> flock: 0.3 · profile: flow` — SHOULD, not MUST; an undeclared FLOCK.md
-// still conforms, presence is the signal.
-const DECLARATION = /^>\s*flock:\s*([^\s·|,]{1,16})(?:\s*[·|,]\s*profile:\s*([A-Za-z0-9._-]{1,32}))?/i;
+// `> flock: 0.4` — SHOULD, not MUST; an undeclared FLOCK.md still conforms,
+// presence is the signal. 0.1–0.3 adoptions carry a trailing `· profile: …`
+// field; §1 says a tool ignores it, so it is matched and dropped, not reported.
+const DECLARATION = /^>\s*flock:\s*([^\s·|,]{1,16})(?:\s*[·|,]\s*profile:\s*[A-Za-z0-9._-]{1,32})?/i;
 
 // §3: typical locations are defaults, not requirements — the Docs Map wins.
 const DEFAULT_PLAN = { feature: 'docs/feature', blueprint: 'docs/blueprint', worklog: 'docs/worklog', index: 'docs/ROADMAP.md' };
@@ -201,7 +202,7 @@ export function check(repo) {
   let declared = 'undeclared';
   for (const raw of text.split(/\r?\n/, 12)) {
     const match = DECLARATION.exec(raw.trim());
-    if (match) { declared = `flock ${match[1]}${match[2] ? ` · profile ${match[2]}` : ''}`; break; }
+    if (match) { declared = `flock ${match[1]}`; break; }
     if (raw.trim().startsWith('##')) break;
   }
   out.push(`FLOCK.md: ${declared}`);
@@ -275,26 +276,29 @@ function selfTest() {
   const assert = (cond, message) => { if (!cond) { console.error(`self-test FAILED: ${message}`); process.exitCode = 1; } };
   const has = (result, fragment) => result.lines.some(line => line.includes(fragment));
 
-  // 1. A flow adoption in the spec's own shape: default vocabulary, a blueprint
+  // 1. An adoption in the spec's own shape: default vocabulary, a blueprint
   //    whose Rounds list counts and whose DoD checklist does not.
-  write('a/FLOCK.md', '# FLOCK.md\n\n> flock: 0.3 · profile: flow\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| blueprint | `docs/blueprint/` | How? |\n| index | [docs/ROADMAP.md](docs/ROADMAP.md) | State? |\n\n## Index\n\n[docs/ROADMAP.md](docs/ROADMAP.md)\n\n## Status Labels\n\n`Design` · `Building` · `Done <date>` · `Parked`\n');
+  write('a/FLOCK.md', '# FLOCK.md\n\n> flock: 0.4\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| blueprint | `docs/blueprint/` | How? |\n| index | [docs/ROADMAP.md](docs/ROADMAP.md) | State? |\n\n## Index\n\n[docs/ROADMAP.md](docs/ROADMAP.md)\n\n## Status Labels\n\n`Design` · `Building` · `Done <date>` · `Parked`\n');
   write('a/docs/ROADMAP.md', '# Roadmap\n\n| Item | Target | Status | Docs |\n|---|---|---|---|\n| One | 1.0 | Building | [ONE.md](feature/ONE.md) |\n');
   write('a/docs/feature/ONE.md', '# One\n\n**Status:** Building 2026-08-28\n**Target:** 1.0\n**Blueprint:** [ONE_BLUEPRINT.md](../blueprint/ONE_BLUEPRINT.md)\n**Worklog:** —\n');
   write('a/docs/blueprint/ONE_BLUEPRINT.md', '# One — Implementation Blueprint\n\n## Rounds\n\n- [x] B1 — done\n- [ ] B2 — pending\n\n```markdown\n- [ ] an example, not a round\n## Rounds\n```\n\n## Definition of Done\n\n- [ ] not a round either\n');
   const a = check(join(root, 'a'));
   assert(a.must.length === 0, `fixture a: expected no MUST violations, got ${JSON.stringify(a.must)}`);
   assert(has(a, 'Round lists (§3.5): 1 — 1/2 checked overall'), `fixture a: §3.5 count wrong: ${JSON.stringify(a.lines)}`);
+  assert(has(a, 'FLOCK.md: flock 0.4'), 'fixture a: the declared version should be reported');
   assert(has(a, '4 declared'), 'fixture a: default vocabulary should read as 4 labels');
   assert(has(a, 'Machine-writable header (§3.3): present'), 'fixture a: §3.3 header should be detected');
 
   // 2. The house shapes two dogfood runs hit: vocabulary as a table with prose
   //    under it (first column only), a house blueprint label the tool cannot
-  //    follow, and an index declared outside the repository.
+  //    follow, and an index declared outside the repository. Declared 0.3 with
+  //    the profile field of that era — read as 0.3, the field dropped (§1).
   write('b/FLOCK.md', '# FLOCK.md\n\n> flock: 0.3 · profile: flow\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| index | [../elsewhere/ROADMAP.md](../elsewhere/ROADMAP.md) | State? |\n\n## Index\n\n[../elsewhere/ROADMAP.md](../elsewhere/ROADMAP.md)\n\n## Status Labels\n\n| Label | Meaning |\n|---|---|\n| `🟢 Shipped <date>` | Out |\n| `🟡 Building` | Under way (`B1 ✅ · B2` per round) |\n\nOne doc writes `✅` instead — recorded, not reconciled.\n');
   write('b/docs/feature/TWO.md', '# Two\n\n**Status:** 🟡 Building\n**Blueprint thực thi:** [TWO_BLUEPRINT.md](../blueprint/TWO_BLUEPRINT.md)\n');
   write('b/docs/blueprint/TWO_BLUEPRINT.md', '# Two — Implementation Blueprint\n\n## Rounds\n\n- [ ] B1\n');
   const b = check(join(root, 'b'));
   assert(b.must.length === 0, `fixture b: an out-of-repo index is a note, not a violation: ${JSON.stringify(b.must)}`);
+  assert(has(b, 'FLOCK.md: flock 0.3') && !has(b, 'profile'), `fixture b: a 0.3 profile field must be dropped, not reported: ${JSON.stringify(b.lines[0])}`);
   assert(has(b, '2 declared — 🟢 Shipped · 🟡 Building'), `fixture b: vocabulary must be first-column only: ${JSON.stringify(b.lines)}`);
   assert(has(b, 'blueprint link resolving: 0'), 'fixture b: a house label must leave the blueprint unreachable');
   assert(has(b, 'Round lists (§3.5): 0'), 'fixture b: an unreachable blueprint contributes no round list');
@@ -308,19 +312,19 @@ function selfTest() {
   const d = check(join(root, 'd'));
   assert(d.must.length === 1 && d.must[0].includes('does not resolve'), `fixture d: the annotated Where cell must fail: ${JSON.stringify(d.must)}`);
 
-  // 4. Verbatim template copies into a fresh repository — the README's
-  //    Starting fresh path. The declared locations do not exist yet; they are
-  //    a plan, and a plan is a note, not a violation.
-  const examples = join(dirname(fileURLToPath(import.meta.url)), '..', 'examples');
-  write('e/FLOCK.md', readFileSync(join(examples, 'minimal', 'FLOCK.md'), 'utf8'));
-  write('e/README.md', '# Fresh\n');
+  // 4. Verbatim copies into a fresh repository — the README's Starting fresh
+  //    path, and the template as shipped. The declared locations do not exist
+  //    yet; they are a plan, and a plan is a note, not a violation.
+  const here = dirname(fileURLToPath(import.meta.url));
+  write('e/FLOCK.md', readFileSync(join(here, '..', 'spec', 'templates', 'FLOCK.md'), 'utf8'));
   const e = check(join(root, 'e'));
-  assert(e.must.length === 0, `fixture e: a fresh minimal-template copy must pass: ${JSON.stringify(e.must)}`);
+  assert(e.must.length === 0, `fixture e: a verbatim template copy must pass: ${JSON.stringify(e.must)}`);
   assert(has(e, 'does not exist yet'), 'fixture e: planned locations must be named as notes');
-  write('f/FLOCK.md', readFileSync(join(examples, 'full', 'FLOCK.md'), 'utf8'));
+  assert(has(e, 'Index: docs/ROADMAP.md — not found'), 'fixture e: an unseeded index is reported, not failed');
+  write('f/FLOCK.md', readFileSync(join(here, '..', 'examples', 'FLOCK.md'), 'utf8'));
   write('f/docs/ROADMAP.md', '| Item | Target | Status | Docs |\n|---|---|---|---|\n');
   const f = check(join(root, 'f'));
-  assert(f.must.length === 0, `fixture f: a fresh full-template copy with a seeded index must pass: ${JSON.stringify(f.must)}`);
+  assert(f.must.length === 0, `fixture f: a fresh example copy with a seeded index must pass: ${JSON.stringify(f.must)}`);
   assert(has(f, 'Machine-writable header (§3.3): present'), 'fixture f: the seeded index header must be detected');
 
   rmSync(root, { recursive: true, force: true });

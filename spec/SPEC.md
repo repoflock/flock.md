@@ -12,18 +12,22 @@ The key words MUST, SHOULD, and MAY are to be interpreted as described in
 - The file MUST be valid GitHub-flavored Markdown. There is no schema; structure is
   expressed with the headings defined below.
 - The file SHOULD begin with a declaration line, as a blockquote directly under the
-  title, naming the spec version and profile:
+  title, naming the spec version:
 
   ```markdown
   # FLOCK.md
-  > flock: 0.4 · profile: core
+  > flock: 0.4
   ```
+
+  Versions 0.1–0.3 wrote a second field, `· profile: core` or `· profile: flow`. The
+  field is gone (§7 says why); a tool MUST ignore it where it still appears, and an
+  adopter has nothing to change.
 
 - Paths in `FLOCK.md` are relative to the repository root.
 
-## 2. The core profile
+## 2. The sections of FLOCK.md
 
-The core profile is the minimum conforming adoption.
+One section is required; the rest are where the file earns its keep.
 
 ### 2.1 Docs Map (required)
 
@@ -31,7 +35,7 @@ The core profile is the minimum conforming adoption.
 
 | Column | Meaning |
 |---|---|
-| **Type** | The kind of document (free vocabulary in core profile) |
+| **Type** | The kind of document — free vocabulary, except the kinds §3 names |
 | **Where** | Path or glob where documents of this type live |
 | **Answers** | The question a reader goes there to answer |
 
@@ -75,10 +79,19 @@ mark the state of work. The recommended default vocabulary:
 
 A repo MAY declare its own vocabulary instead; declaring it is what matters.
 
-## 3. The flow profile
+### 2.4 Conventions (recommended)
 
-The flow profile is a superset of the core profile for projects that run a full
-design-to-delivery cycle. Its heart is the **question chain**:
+`FLOCK.md` SHOULD contain a `## Conventions` section restating the §4 history rules,
+so a reader who opens nothing else still meets them. The rules bind every adoption
+whether or not the section exists; the section is where the repo says so.
+
+## 3. The lifecycle
+
+The standard is built around one **question chain**, and a repository declares in its
+`## Lifecycle` section whether and how it runs it. Nothing in this section is required
+of a repository that runs no lifecycle — the Docs Map is the only MUST — but a
+repository that does run one SHOULD run this one, so that tools and readers meet the
+same shape everywhere:
 
 > **Why → What → How → What happened.** Four questions, four documents, three-way
 > linked. A unit of work is done when all four have written answers; the index answers
@@ -101,11 +114,12 @@ finished rows into (§3.6). Typical
 locations are defaults, not requirements — the Docs Map declares the actual path, so
 a repo already using, say, `docs/blueprints/` stays conforming without renaming.
 
-A flow-profile `FLOCK.md` SHOULD carry two sections beyond the core three: a
-`## Lifecycle` section stating the chain and how this repository runs it, and a
-`## Conventions` section restating the §4 history rules — the shape
-[`FLOCK_FLOW.md`](templates/FLOCK_FLOW.md) scaffolds. "Lifecycle" names the chain;
-the states a piece of work moves through are Status Labels (§2.3).
+A repository that runs the chain SHOULD carry a `## Lifecycle` section stating the
+chain and how this repository runs it — the shape [`FLOCK.md`](templates/FLOCK.md)
+scaffolds. "Lifecycle" names the chain; the states a piece of work moves through are
+Status Labels (§2.3). A repository that runs no lifecycle omits the section; a
+repository that runs a different one declares it there, and §3.1–§3.6 simply have
+nothing to read.
 
 Rules:
 
@@ -125,7 +139,7 @@ Rules:
 
 ### 3.1 Document label block *(new in 0.2)*
 
-Each flow document SHOULD open with a label block: bold labels, one per line, directly
+Each lifecycle document SHOULD open with a label block: bold labels, one per line, directly
 under the H1 title. Recognized labels:
 
 | Label | In | Meaning |
@@ -150,11 +164,10 @@ and MUST NOT remove them.
 
 Starter skeletons live in [`templates/`](templates/): the three document kinds —
 [`FEATURE.md`](templates/FEATURE.md) · [`BLUEPRINT.md`](templates/BLUEPRINT.md) ·
-[`WORKLOG.md`](templates/WORKLOG.md) — and the `FLOCK.md` entry point per profile —
-[`FLOCK_CORE.md`](templates/FLOCK_CORE.md) · [`FLOCK_FLOW.md`](templates/FLOCK_FLOW.md).
-`<angle-bracket>` spans are placeholders.
+[`WORKLOG.md`](templates/WORKLOG.md) — and the entry point itself —
+[`FLOCK.md`](templates/FLOCK.md). `<angle-bracket>` spans are placeholders.
 
-A tool that scaffolds flow documents SHOULD start from these templates. The templates
+A tool that scaffolds lifecycle documents SHOULD start from these templates. The templates
 define the skeleton — headings, label block, the questions each section answers — not
 the prose; a repo MAY extend them, and existing documents that grew organically are not
 made non-conforming by them.
@@ -190,12 +203,13 @@ missing table.
 
 Four transitions are common enough to name, so tools can offer them:
 
-- **Adopt** *(no `FLOCK.md` → core or flow)*: create `FLOCK.md` at the repository root
-  from the matching profile template. For the flow profile, also create the index file
-  it references, seeded with the §3.3 table header — so Open has somewhere to write.
-  In a repository that already has documentation, Adopt is declarative: the Docs Map
-  points at documents where they already are (typical locations are defaults, not
-  requirements), and the transition MUST NOT move, rename, or rewrite existing files.
+- **Adopt** *(no `FLOCK.md` → `FLOCK.md`)*: create `FLOCK.md` at the repository root
+  from the template, and the index file it references, seeded with the §3.3 table
+  header — so Open has somewhere to write. In a repository that already has
+  documentation, Adopt is declarative: the Docs Map points at documents where they
+  already are (typical locations are defaults, not requirements), rows for kinds the
+  repository does not have are deleted rather than filled, and the transition MUST NOT
+  move, rename, or rewrite existing files.
   Backfilling is not required — neither index rows for finished work nor §4 dates in
   pre-existing documents; the conventions apply from adoption forward.
 - **Open** *(nothing → `Design`)*: create the feature document from its template and add
@@ -278,7 +292,7 @@ absence from the index as a document's absence from the repository.
 
 ## 4. History conventions
 
-These rules apply to all profiles and are the heart of the standard: they keep a repo's
+These rules apply to every adoption and are the heart of the standard: they keep a repo's
 recorded reasoning trustworthy over time — for the humans who return to it and for the
 agents that will otherwise confidently re-litigate or refactor away decisions.
 
@@ -301,8 +315,8 @@ agents that will otherwise confidently re-litigate or refactor away decisions.
 - `FLOCK.md` complements `AGENTS.md`; it does not replace it. A repo that keeps an
   instruction file for agents — `AGENTS.md`, `CLAUDE.md`, or a tool-specific
   equivalent — SHOULD reference `FLOCK.md` from it.
-- In a flow-profile repo, an agent opening or advancing work SHOULD use the §3.4
-  transitions and the §3.2 templates rather than inventing structure.
+- In a repository that runs the lifecycle, an agent opening or advancing work SHOULD
+  use the §3.4 transitions and the §3.2 templates rather than inventing structure.
 
 ## 6. Version compatibility *(new in 0.2)*
 
@@ -328,10 +342,21 @@ must be survivable rather than fatal.
 
 ## 7. Conformance summary
 
-| Level | Requirements |
+| A tool can read | When the repository has |
 |---|---|
-| **Core** | `FLOCK.md` at root · Docs Map section |
-| **Flow** | Core, plus the §3 kind vocabulary, linking rules, and the `## Lifecycle` / `## Conventions` sections |
-| **Flow, machine-writable** *(opt-in)* | Flow, plus the §3.1 label block and a §3.3 index table; a §3.6 shipped ledger if the index is to have an exit |
+| **A conforming adoption** | `FLOCK.md` at root · Docs Map section |
+| **The lifecycle** | the §3 kind vocabulary, linking rules, and a `## Lifecycle` section |
+| **Machine-writable work** *(opt-in)* | the §3.1 label block and a §3.3 index table; a §3.6 shipped ledger if the index is to have an exit |
 
 Everything not marked MUST is guidance: adopt what earns its keep.
+
+These are tiers of what a tool can read, not choices an adopter makes up front.
+Versions 0.1–0.3 called the first two *profiles* — `core` and `flow` — and asked the
+declaration line to name one. Dropped (decided 2026-09-10): a profile is a promise
+about shape, and the standard is deliberately loose about shape — the Docs Map
+declares what exists, and everything past it is SHOULD. Every adoption made with the
+standard had declared `flow` and then declared, row by row, which parts of it were in
+play; the profile said nothing the file did not already say, while costing a second
+template, a second example, a branch in every adoption prompt, and a question in every
+adoption dialog. Rejected: keeping `core` as an unadvertised floor — a name nobody is
+told to use is a name nobody can be expected to understand when they meet it.
