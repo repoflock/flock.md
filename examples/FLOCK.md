@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.4
+> flock: 0.5
 
 ## Docs Map
 
@@ -12,16 +12,21 @@
 | worklog | `docs/worklog/` | What actually happened while building? |
 | index | [docs/ROADMAP.md](docs/ROADMAP.md) | What exists, in what state? |
 | shipped | [docs/SHIPPED.md](docs/SHIPPED.md) | What shipped, in which version? Rows the index released |
+| research | `docs/research/` | What was measured outside this repo, when, from which source? Dated snapshots — facts and conclusions, never decisions |
 | technical | `docs/technical/` | How does the system work today? |
 | business | `docs/business/` | How does this make money, and for whom? |
 
 ## Lifecycle
 
 **Why → What → How → What happened**: `brd` → `feature` → `blueprint` → `worklog`,
-indexed in `docs/ROADMAP.md`. `technical` and `business` sit outside the chain — the
-chain fixes the lifecycle, not the whole map.
+indexed in `docs/ROADMAP.md`. `research`, `technical` and `business` sit outside the
+chain — the chain fixes the lifecycle, not the whole map. A brd or feature cites the
+research it rests on with `**Research:**`; the link is one-way.
 
 - A feature doc links to its blueprint and worklog; both link back (three-way linking).
+- A feature doc is read against the rest of the repository before its blueprint is
+  written, and says so in `**Audit:**`
+  ([spec §3.1](https://github.com/repoflock/flock.md/blob/main/spec/SPEC.md#31-document-label-block-new-in-02)).
 - A blueprint describes the code as measured, in rounds (`B1`, `B2`, …) that stand alone.
 - A worklog block is appended when a round closes: what was done, deviations from the
   blueprint, decisions that emerged, what was left for later.

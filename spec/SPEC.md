@@ -16,7 +16,7 @@ The key words MUST, SHOULD, and MAY are to be interpreted as described in
 
   ```markdown
   # FLOCK.md
-  > flock: 0.4
+  > flock: 0.5
   ```
 
   Versions 0.1–0.3 wrote a second field, `· profile: core` or `· profile: flow`. The
@@ -108,9 +108,16 @@ The chain fixes the **Type** vocabulary of the lifecycle kinds:
 | *Where?* | `index` | What exists, in what state? | `docs/ROADMAP.md` |
 
 The chain fixes the lifecycle, not the whole map: kinds outside the chain
-(`technical`, `business`, …) MAY be declared as additional Docs Map rows. One such kind
-has a fixed name because a tool writes to it: `shipped`, the ledger the index releases
-finished rows into (§3.6). Typical
+(`technical`, `business`, …) MAY be declared as additional Docs Map rows. Two such kinds
+have fixed names. `shipped` has one because a tool writes to it: the ledger the index
+releases finished rows into (§3.6). `research` has one because other documents link to
+it *(new in 0.5)*: a dated snapshot of what was measured outside the repository and
+from which sources — facts and conclusions, never decisions. The decisions a research
+document informs are written in the `brd` or `feature` that cites it, where they get a
+date and can be superseded (§4); a research document is not a stage of the chain, it is
+what the chain's *Why* cites. Typical location `docs/research/`, one topic per file
+with the date in the name; the Docs Map MAY point outside the repository for this kind,
+since research often serves several repositories at once. Typical
 locations are defaults, not requirements — the Docs Map declares the actual path, so
 a repo already using, say, `docs/blueprints/` stays conforming without renaming.
 
@@ -136,6 +143,16 @@ Rules:
 - One `brd` MAY cover several `feature` documents. A `feature` MAY link to the `brd`
   it descends from via the `**Brd:**` label (§3.1); the link is one-way, feature → brd
   — a brd is not required to enumerate its features.
+- A `brd` or `feature` MAY cite the `research` it rests on via the `**Research:**`
+  label (§3.1), one-way and possibly several links — a research document is not
+  required to enumerate what cites it, for the same reason a brd is not. A research
+  document MUST NOT record a decision; a tool reading one has nothing to track.
+- A `brd` or `feature` SHOULD pass an audit — a read by someone other than the writing
+  session, or by a reviewer the repository's agent instruction file names (§5) —
+  before its blueprint is written, and SHOULD say so in the `**Audit:**` label (§3.1). What an audit catches
+  is the contradiction between this document and a decision recorded in another one;
+  that is the mistake that surfaces three rounds later, under tests and schemas, if it
+  is not caught here.
 
 ### 3.1 Document label block *(new in 0.2)*
 
@@ -147,6 +164,8 @@ under the H1 title. Recognized labels:
 | `**Status:**` | all three kinds | A declared status label (§2.3), optionally with a date |
 | `**Target:**` | feature | The version or milestone the work currently aims at *(optional)* |
 | `**Brd:**` | feature | Link to the brd this feature descends from *(optional, new in 0.3)* |
+| `**Research:**` | brd, feature | Link(s) to the research this document rests on *(optional, new in 0.5)* |
+| `**Audit:**` | brd, feature | Who read this document against the rest of the repository, when, and how far *(optional, new in 0.5)* |
 | `**Feature:**` | blueprint, worklog | Link back to the feature document |
 | `**Blueprint:**` / `**Worklog:**` | feature | Links completing three-way linking; `—` until the file exists |
 
@@ -155,7 +174,21 @@ work by the exact value string — the §3.3 index column carries the same short
 so a qualification glued to the value turns a per-version view into one group per
 document. Qualifications and history belong on a line of their own below the label,
 or in the body; a document whose aim cannot be stated as a short value SHOULD omit
-the label rather than carry an invented one.
+the label rather than carry an invented one. A sprint or iteration code is a milestone:
+`1.2` and `S3` are both valid values *(clarified in 0.5)* — a repository that ships no
+versions still has a delivery rhythm, and that rhythm is what Target groups by.
+
+The `**Research:**` value is one or more links, on one line, separated by ` · `; a
+link MAY leave the repository. The label is one-way (§3): it says what this document
+rests on, and a tool reads it to show evidence — it is not a progress signal, and a
+tool SHOULD NOT resolve the links as if they were chain links.
+
+The `**Audit:**` value SHOULD name who read the document, the date, and the scope
+read or the commit it was read at — `Reviewer 2026-10-14 — whole document, 3 fixes in
+place` — or a value from the repository's own vocabulary meaning *not yet*. A document
+written by a reviewer the repository's agent instruction file names MAY count its own
+writing as the audit, citing the commit. A tool reads the label to tell audited from unaudited;
+it MUST NOT judge the value beyond that.
 
 A document MAY carry additional labels. A tool MUST ignore labels it does not recognize,
 and MUST NOT remove them.
@@ -216,12 +249,19 @@ Four transitions are common enough to name, so tools can offer them:
   an index row.
 - **Advance** *(`Design` → `Building`)*: create the blueprint and worklog from their
   templates, complete the three-way links, and update Status in both the feature
-  document and the index.
-- **Release** *(finished → shipped, new in 0.4)*: when a version is released, move every
-  index row whose Status is a finished label and whose Target is that version, verbatim,
-  from the index to the shipped ledger (§3.6), under the heading for that version. The
-  trigger is the release — the tag, the published build — not the Status alone: a
-  finished row aimed at an unreleased version is still that release's open business.
+  document and the index. A tool offering Advance SHOULD decline, or ask, when the
+  feature document carries an `**Audit:**` label whose value means *not yet* — and
+  SHOULD ask when it cannot tell, since the word for *not yet* is the repository's
+  *(new in 0.5)* — the audit is the one check the chain asks for before the *How* is written,
+  and a tool that advances past it silently removes the only moment it could have
+  been noticed. A document with no `**Audit:**` label declares nothing, and Advance
+  proceeds as before.
+- **Release** *(finished → shipped, new in 0.4)*: when a Target is delivered — a
+  version tagged and its build published, or a sprint closed by its demo *(wording
+  widened in 0.5)* — move every index row whose Status is a finished label and whose
+  Target is that value, verbatim, from the index to the shipped ledger (§3.6), under the
+  heading for that Target. The trigger is the delivery, not the Status alone: a
+  finished row aimed at an undelivered Target is still that Target's open business.
   The transition MUST NOT alter a row it moves, and MUST NOT touch the documents the row
   links to; they stay where the Docs Map says they are. A repository that declares no
   ledger has no Release transition.
@@ -347,6 +387,7 @@ must be survivable rather than fatal.
 | **A conforming adoption** | `FLOCK.md` at root · Docs Map section |
 | **The lifecycle** | the §3 kind vocabulary, linking rules, and a `## Lifecycle` section |
 | **Machine-writable work** *(opt-in)* | the §3.1 label block and a §3.3 index table; a §3.6 shipped ledger if the index is to have an exit |
+| **Evidence and review** *(opt-in, new in 0.5)* | `**Research:**` and `**Audit:**` labels on brd and feature documents, and a `research` row in the Docs Map |
 
 Everything not marked MUST is guidance: adopt what earns its keep.
 

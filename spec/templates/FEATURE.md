@@ -3,8 +3,10 @@
 **Status:** Design <YYYY-MM-DD>
 **Target:** <version or milestone, the short code alone — optional, delete if unused>
 **Brd:** <link to the brd this descends from — optional, delete if unused>
+**Research:** <link(s) to the research this rests on, ` · ` between them — optional, delete if unused>
 **Blueprint:** —
 **Worklog:** —
+**Audit:** <not yet — or who read it, the date, and how far; optional, delete if unused>
 
 > Boundary: <adjacent documents this one deliberately does not cover; link them>.
 

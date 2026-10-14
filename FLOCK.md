@@ -1,6 +1,6 @@
 # FLOCK.md
 
-> flock: 0.4
+> flock: 0.5
 
 This repository hosts the Flock standard and follows it. It runs no lifecycle — a spec
 has no features to design and build — so there is no `## Lifecycle` section; the Docs

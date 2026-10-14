@@ -3,6 +3,56 @@
 Spec versions follow [SemVer](https://semver.org). While in `0.x`, minor versions may
 change the spec incompatibly.
 
+## 0.5.0 — draft (unreleased)
+
+Theme: evidence and review. The chain learns what it rests on and who read it, and a
+Target learns to be a sprint. Everything is SHOULD/MAY and additive; a 0.4 adoption
+changes nothing, and a 0.4 tool meeting the new labels ignores them (§3.1, §6).
+
+- **`research` is a named kind outside the chain** (decided 2026-10-14). A dated
+  snapshot of what was measured outside the repository and from which sources —
+  facts and conclusions, never decisions. It gets a fixed name for the mirror of the
+  reason `shipped` has one: `shipped` because a tool writes to it, `research` because
+  other documents link to it. Measured on the source adoptions: 18 research notes
+  living one level above every repository, cited by 30 documents by path in the body
+  and by 3 through a house label no tool could read — the same shape the 0.3 label
+  alignment had already met once with `Blueprint:`. The Docs Map MAY point outside
+  the repository for this kind.
+- **`**Research:**` label** (§3.1) on brd and feature: one or more links on one line,
+  one-way, the same way `**Brd:**` is one-way — a research document is not required
+  to enumerate what cites it.
+- **Rejected: research as a fifth question of the chain** ("What is true?" before
+  "Why?"). A chain stage is one-to-one with a unit of work, three-way linked, and
+  moves through Status; research is many-to-many, is a snapshot that never changes
+  state, and mostly lives outside the repository it serves. Forcing it into the chain
+  would hand it labels it does not have and links it does not need. It is what *Why*
+  cites, not a question before it.
+- **`**Audit:**` label** (§3.1) on brd and feature: who read the document against
+  the rest of the repository, when, and how far — or the repository's own word for
+  *not yet*. A tool offering Advance SHOULD decline or ask while the value means not
+  yet (§3.4). The first label about *who*; what it catches is the contradiction
+  between this document and a decision recorded in another, which is the mistake
+  that otherwise surfaces three rounds later under tests and schemas. Rejected with
+  it: `**Author:**` or `**Model:**` labels — the commit trailer already records who
+  wrote a document, and a second copy drifts.
+- **Target may be a sprint** (§3.1 clarified, §3.4 Release reworded): `S3` is a
+  milestone the way `1.2` is a version, and Release fires when a Target is
+  *delivered* — a version tagged, or a sprint closed by its demo — rather than only
+  when a version is released. Measured: two internal-tool adoptions had declared "no
+  Target, this repository ships no versions" while running one-week sprints closed by
+  demo; the sprint was the Target they lacked, and without one the index had no exit.
+- **Rejected: a `sprint` kind, a `## Sprints` section in the index, or a sprint
+  Status.** A file per sprint is the per-version index 0.3 declined and 0.4 declined
+  again under the ledger; a section inside the index keeps the record but not the
+  size; a Status is a document's state, not a calendar. The sprint's rhythm — length,
+  closing condition, who merges — is a sentence in `## Lifecycle`, a declaration.
+- **Roles: not in the spec yet** (decided 2026-10-14). Who owns which kind — a
+  decider, a document author who also audits, a builder who writes code and appends
+  the worklog, a designer — is being piloted as a `## Roles` section on one adoption.
+  It enters the spec after a second pilot, the way every section before it did. The
+  binding of roles to people, agents or models stays in the agent instruction file
+  (§5): it changes monthly, and the standard names no vendor.
+
 ## 0.4.0 — 2026-10-15
 
 Theme: close the chain, and one shape. The index gains an exit; the core/flow profiles
