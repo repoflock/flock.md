@@ -3,7 +3,7 @@
 Spec versions follow [SemVer](https://semver.org). While in `0.x`, minor versions may
 change the spec incompatibly.
 
-## 0.4.0 — draft (unreleased)
+## 0.4.0 — 2026-10-15
 
 Theme: close the chain, and one shape. The index gains an exit; the core/flow profiles
 go. Everything is SHOULD/MAY; 0.3 adoptions remain conforming — a `profile:` field on
