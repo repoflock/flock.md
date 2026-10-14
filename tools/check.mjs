@@ -244,6 +244,7 @@ export function check(repo) {
   let names = [];
   try { names = readdirSync(join(repo, plan.feature)).filter(name => name.toLowerCase().endsWith('.md')).slice(0, 500); } catch { /* no feature dir — reported via counts */ }
   let withStatus = 0, matched = 0, withTarget = 0, withBlueprint = 0, withWorklog = 0, withRounds = 0, checked = 0, totalRounds = 0;
+  let withResearch = 0, withAudit = 0;
   for (const name of names) {
     const doc = read(join(repo, plan.feature, name));
     if (doc === undefined) continue;
@@ -259,10 +260,16 @@ export function check(repo) {
       if (rounds) { withRounds++; checked += rounds.done; totalRounds += rounds.total; }
     }
     if (linkedDoc(repo, plan, 'worklog', base, labelValue(doc, 'Worklog'))) withWorklog++;
+    // §3.1 (0.5): Research links are counted, never resolved — a link MAY leave
+    // the repository. Audit is read as present or absent; a tool MUST NOT judge
+    // the value beyond that, so any non-empty value counts.
+    if (/\[[^\]]*\]\([^)]+\)/.test(labelValue(doc, 'Research') ?? '')) withResearch++;
+    if (labelValue(doc, 'Audit')) withAudit++;
   }
   out.push(`Feature documents (${plan.feature}): ${names.length}`);
   out.push(`  Status label (§3.1): ${withStatus}${vocab ? ` · matching the declared vocabulary: ${matched}` : ''}`);
   out.push(`  Target: ${withTarget} · blueprint link resolving: ${withBlueprint} · worklog link resolving: ${withWorklog}`);
+  out.push(`  Research (§3.1): ${withResearch} · Audit: ${withAudit}`);
   out.push(`  Round lists (§3.5): ${withRounds}${withRounds ? ` — ${checked}/${totalRounds} checked overall` : ''}`);
 
   return { lines: out, must };
@@ -278,9 +285,9 @@ function selfTest() {
 
   // 1. An adoption in the spec's own shape: default vocabulary, a blueprint
   //    whose Rounds list counts and whose DoD checklist does not.
-  write('a/FLOCK.md', '# FLOCK.md\n\n> flock: 0.4\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| blueprint | `docs/blueprint/` | How? |\n| index | [docs/ROADMAP.md](docs/ROADMAP.md) | State? |\n\n## Index\n\n[docs/ROADMAP.md](docs/ROADMAP.md)\n\n## Status Labels\n\n`Design` · `Building` · `Done <date>` · `Parked`\n');
+  write('a/FLOCK.md', '# FLOCK.md\n\n> flock: 0.4\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| blueprint | `docs/blueprint/` | How? |\n| index | [docs/ROADMAP.md](docs/ROADMAP.md) | State? |\n| research | `../research/` | Measured? |\n\n## Index\n\n[docs/ROADMAP.md](docs/ROADMAP.md)\n\n## Status Labels\n\n`Design` · `Building` · `Done <date>` · `Parked`\n');
   write('a/docs/ROADMAP.md', '# Roadmap\n\n| Item | Target | Status | Docs |\n|---|---|---|---|\n| One | 1.0 | Building | [ONE.md](feature/ONE.md) |\n');
-  write('a/docs/feature/ONE.md', '# One\n\n**Status:** Building 2026-08-28\n**Target:** 1.0\n**Blueprint:** [ONE_BLUEPRINT.md](../blueprint/ONE_BLUEPRINT.md)\n**Worklog:** —\n');
+  write('a/docs/feature/ONE.md', '# One\n\n**Status:** Building 2026-08-28\n**Target:** 1.0\n**Blueprint:** [ONE_BLUEPRINT.md](../blueprint/ONE_BLUEPRINT.md)\n**Worklog:** —\n**Research:** [x.md](../../research/x.md) · [y](https://example.com)\n**Audit:** pending\n');
   write('a/docs/blueprint/ONE_BLUEPRINT.md', '# One — Implementation Blueprint\n\n## Rounds\n\n- [x] B1 — done\n- [ ] B2 — pending\n\n```markdown\n- [ ] an example, not a round\n## Rounds\n```\n\n## Definition of Done\n\n- [ ] not a round either\n');
   const a = check(join(root, 'a'));
   assert(a.must.length === 0, `fixture a: expected no MUST violations, got ${JSON.stringify(a.must)}`);
@@ -288,13 +295,15 @@ function selfTest() {
   assert(has(a, 'FLOCK.md: flock 0.4'), 'fixture a: the declared version should be reported');
   assert(has(a, '4 declared'), 'fixture a: default vocabulary should read as 4 labels');
   assert(has(a, 'Machine-writable header (§3.3): present'), 'fixture a: §3.3 header should be detected');
+  assert(has(a, 'Research (§3.1): 1 · Audit: 1'), `fixture a: §3.1 Research/Audit counts wrong: ${JSON.stringify(a.lines)}`);
+  assert(has(a, 'research → ../research/ (outside the repository)'), `fixture a: an out-of-repo research row is a note, not a violation: ${JSON.stringify(a.lines)}`);
 
   // 2. The house shapes two dogfood runs hit: vocabulary as a table with prose
   //    under it (first column only), a house blueprint label the tool cannot
   //    follow, and an index declared outside the repository. Declared 0.3 with
   //    the profile field of that era — read as 0.3, the field dropped (§1).
   write('b/FLOCK.md', '# FLOCK.md\n\n> flock: 0.3 · profile: flow\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| index | [../elsewhere/ROADMAP.md](../elsewhere/ROADMAP.md) | State? |\n\n## Index\n\n[../elsewhere/ROADMAP.md](../elsewhere/ROADMAP.md)\n\n## Status Labels\n\n| Label | Meaning |\n|---|---|\n| `🟢 Shipped <date>` | Out |\n| `🟡 Building` | Under way (`B1 ✅ · B2` per round) |\n\nOne doc writes `✅` instead — recorded, not reconciled.\n');
-  write('b/docs/feature/TWO.md', '# Two\n\n**Status:** 🟡 Building\n**Blueprint thực thi:** [TWO_BLUEPRINT.md](../blueprint/TWO_BLUEPRINT.md)\n');
+  write('b/docs/feature/TWO.md', '# Two\n\n**Status:** 🟡 Building\n**Blueprint thực thi:** [TWO_BLUEPRINT.md](../blueprint/TWO_BLUEPRINT.md)\n**Research:** notes in the wiki\n**Audit:**\n');
   write('b/docs/blueprint/TWO_BLUEPRINT.md', '# Two — Implementation Blueprint\n\n## Rounds\n\n- [ ] B1\n');
   const b = check(join(root, 'b'));
   assert(b.must.length === 0, `fixture b: an out-of-repo index is a note, not a violation: ${JSON.stringify(b.must)}`);
@@ -303,6 +312,7 @@ function selfTest() {
   assert(has(b, 'blueprint link resolving: 0'), 'fixture b: a house label must leave the blueprint unreachable');
   assert(has(b, 'Round lists (§3.5): 0'), 'fixture b: an unreachable blueprint contributes no round list');
   assert(has(b, 'outside the repository'), 'fixture b: the out-of-repo index must be named');
+  assert(has(b, 'Research (§3.1): 0 · Audit: 0'), `fixture b: a linkless Research and an empty Audit must not count: ${JSON.stringify(b.lines)}`);
 
   // 3. MUST violations: a missing Docs Map, and a Where path that lies.
   write('c/FLOCK.md', '# FLOCK.md\n\nNo sections at all.\n');
