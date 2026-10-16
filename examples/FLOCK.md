@@ -45,6 +45,19 @@ finished rows do not stay: when a version is released they move verbatim to
 
 `Design` · `Building` · `Done <date>` · `Parked`
 
+## Roles
+
+Roles own kinds; who plays a role — person, agent, model — is cast in the agent
+instruction file, where names may change
+([spec §2.5](https://github.com/repoflock/flock.md/blob/main/spec/SPEC.md#25-roles-optional-new-in-05)).
+This table divides work, not authority.
+
+| Role | Owns | Decides |
+|---|---|---|
+| owner | — | every dated decision; the go-ahead when `**Audit:**` still means *not yet* |
+| architect | `brd` · `feature` · `blueprint` · the `**Audit:**` field · reading the `worklog` back | the scope of a round or sprint, its definition of done, the merge at its end |
+| builder | code · `worklog` (appended when a round closes) | nothing about scope — a deviation from the blueprint goes into the worklog, not into code |
+
 ## Conventions
 
 - Decisions carry dates: `(decided 2026-08-22)`.

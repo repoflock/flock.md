@@ -32,6 +32,7 @@ A single markdown file, `FLOCK.md`, at the repository root. It declares:
 3. **Index** — where the one-line-per-feature overview lives.
 4. **Conventions** — the history rules: decisions carry dates, reversals are patched
    in place and marked `SUPERSEDED`, rejected alternatives are recorded.
+5. **Roles** *(optional)* — who owns which kind of document, and what each role decides.
 
 Plain GitHub-flavored Markdown. No schema, no tooling, no lock-in. Only the Docs Map
 is required; a repo declares it in five minutes, and readers and agents get a stable
@@ -46,7 +47,9 @@ of work is done when four questions have written answers, in order:
 > **What happened?** → `worklog`
 
 The index answers the fifth — *where is everything, in what state?* — for every unit
-of work at once. Four questions, four documents, three-way linked. Documents outside
+of work at once. An optional `## Roles` section answers a sixth — *who owns what?* —
+for the whole repository: which role owns which kind, and what it decides; who plays a
+role stays in your agent instruction file. Four questions, four documents, three-way linked. Documents outside
 the chain (technical notes, business docs) are welcome; they get their own Docs Map
 rows — the chain fixes the lifecycle, not the whole map.
 

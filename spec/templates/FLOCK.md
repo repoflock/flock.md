@@ -42,6 +42,18 @@ Release). Delete the `shipped` row above if finished work is to stay in the inde
 
 `Design` · `Building` · `Done <date>` · `Parked`
 
+## Roles
+
+Roles own kinds; who plays a role — person, agent, model — is cast in the agent
+instruction file, where names may change (spec §2.5). This table divides work, not
+authority. Delete the section if one person plays every role and no agent does.
+
+| Role | Owns | Decides |
+|---|---|---|
+| owner | — | every dated decision; the go-ahead when `**Audit:**` still means *not yet* |
+| architect | `brd` · `feature` · `blueprint` · the `**Audit:**` field | the scope of a round or sprint, its definition of done |
+| builder | code · `worklog` (appended when a round closes) | nothing about scope — a deviation from the blueprint goes into the worklog, not into code |
+
 ## Conventions
 
 - Decisions carry dates: `(decided <YYYY-MM-DD>)`.

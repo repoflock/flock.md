@@ -46,12 +46,37 @@ changes nothing, and a 0.4 tool meeting the new labels ignores them (§3.1, §6)
   again under the ledger; a section inside the index keeps the record but not the
   size; a Status is a document's state, not a calendar. The sprint's rhythm — length,
   closing condition, who merges — is a sentence in `## Lifecycle`, a declaration.
-- **Roles: not in the spec yet** (decided 2026-10-14). Who owns which kind — a
-  decider, a document author who also audits, a builder who writes code and appends
-  the worklog, a designer — is being piloted as a `## Roles` section on one adoption.
-  It enters the spec after a second pilot, the way every section before it did. The
-  binding of roles to people, agents or models stays in the agent instruction file
-  (§5): it changes monthly, and the standard names no vendor.
+- **`## Roles` section** (§2.5; decided 2026-10-16, after being held back on
+  2026-10-14 until a second pilot existed). A table of `Role | Owns | Decides`
+  answering a sixth question — *who owns what?* — for the whole repository, the way
+  the index answers the fifth for every unit of work. Owns names Docs Map kinds so a
+  tool can join the two tables; the table divides work, not authority, and a tool
+  MUST NOT infer permissions from it. The binding of roles to people, agents or
+  models stays in the agent instruction file (§5): it changes monthly, and the
+  standard names no vendor. Measured on the two pilots: a software adoption declared
+  four roles over chain kinds; a video-production adoption declared roles over kinds
+  *outside* the chain (`episode`, `calendar`) — and went in with four roles and came
+  out with three, the publish role folding into the writer (the copy) and the
+  producer (the press). The second pilot is why the section is in the spec: it showed
+  the shape is not a software table in disguise, and that the pilot teaches the spec
+  its vocabulary, not the other way round.
+- **Team presets are illustrative tables inside §2.5, not files.** The owner asked for
+  predefined teams (a software team, a video team). What differs between two teams is
+  the *content* of the Roles table, not the *shape* of any section, so the presets are
+  two non-normative tables in the spec that an adopter copies and edits. Rejected: an
+  `examples/teams/<team>/FLOCK.md` tree with a "pick the example closest to your team"
+  fork in Quick start and a team picker in the adoption dialog — that is, item for
+  item, the cost list the 0.4 profile drop paid (a second example, a branch in the
+  fresh-repo prompt, a question in the dialog, a name to explain), and each team
+  example would carry a different Docs Map, which Quick start tells adopters not to
+  rewrite to a guess. Rejected: a `preset:` field on the declaration line — a profile
+  by another name. Rejected: a third team table without a third adoption — a team
+  with no pilot has no table.
+- **Rejected: Who as a fifth stage of the chain, or an Owner column in the Docs Map.**
+  A chain stage is a document per unit of work; a *who* document per feature would be
+  empty or identical across features. An Owner column would widen the only MUST in
+  the standard (§2.1, three columns) to carry something SHOULD, and leave a
+  one-person repository filling or blanking a cell on every row.
 
 ## 0.4.0 — 2026-10-15
 

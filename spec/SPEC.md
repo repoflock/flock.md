@@ -1,6 +1,6 @@
 # The Flock Standard — Specification
 
-**Version 0.4.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
+**Version 0.5.0 (draft)** · Versioned with [SemVer](https://semver.org); `0.x` means the
 spec is still evolving and minor versions may break.
 
 The key words MUST, SHOULD, and MAY are to be interpreted as described in
@@ -85,6 +85,56 @@ A repo MAY declare its own vocabulary instead; declaring it is what matters.
 so a reader who opens nothing else still meets them. The rules bind every adoption
 whether or not the section exists; the section is where the repo says so.
 
+### 2.5 Roles (optional) *(new in 0.5)*
+
+`FLOCK.md` MAY contain a `## Roles` section answering a question the chain does not ask:
+**who owns what?** The chain asks four questions about one unit of work and the index
+answers a fifth for all of them (§3); `## Roles` answers a sixth for the whole
+repository — which role owns which kind, and what that role decides. It is a table:
+
+| Column | Meaning |
+|---|---|
+| **Role** | A role name — free vocabulary |
+| **Owns** | What the role is responsible for: kinds, named by their Docs Map **Type**, and things that are not documents — code, a gate, a release |
+| **Decides** | The decisions that are this role's to make, and the ones that are explicitly not |
+
+Rules:
+
+- **Owns** SHOULD name kinds by their Docs Map Type, so a tool can join the two tables.
+  A kind outside the chain is as valid an entry as one inside it.
+- **The table divides work, not authority.** A tool MAY show which role owns a kind; it
+  MUST NOT infer from the table who may read or write anything.
+- **The table names roles, not people, agents or models.** Who plays a role — and which
+  model, where an agent does — is cast in the agent instruction file (§5), where names
+  are allowed to change monthly; the standard names no vendor. Who is working on a unit
+  of work *right now* is tracker state, not a label: it changes daily and does not live
+  in git.
+- A repository with one contributor MAY still declare roles when agents play some of
+  them. The role worth declaring first is the one that holds `**Audit:**` (§3.1) — it
+  is the only role the lifecycle checks.
+
+Two illustrative tables, from the adoptions that piloted the section. They are examples,
+not vocabularies: copy one, rename roles, merge rows. The standard has no preset field
+and no list of team types — a team is whatever its table says.
+
+A software team:
+
+| Role | Owns | Decides |
+|---|---|---|
+| owner | — | every dated decision; the spoken go-ahead when `**Audit:**` still means *not yet* |
+| architect | `brd` · `feature` · `blueprint` · the `**Audit:**` field · reading the `worklog` back | the scope of a round or sprint, its definition of done, the merge at its end |
+| builder | code · `worklog` (appended when a round closes) | nothing about scope — a deviation from the blueprint is written into the worklog, not decided in code |
+| designer | `design` | screens and tokens; a port that drifts is an issue for the builder, not a fix in the code |
+
+A video production team, where episodes live outside the chain as data (kinds `episode`,
+`calendar`, `channel`) and the chain is run for the rendering engine:
+
+| Role | Owns | Decides |
+|---|---|---|
+| producer | — | every dated decision: niche, cadence, the measurement milestones; the two gates — approving a script, and pressing publish |
+| writer | `brd` · `feature` · `blueprint` · `calendar` · in `episode`: the script and every word spoken or shown, the publish copy | topic, angle and order of episodes (proposed; the producer decides); does not run voice or render, does not touch the engine |
+| editor | in `episode`: scene composition, narration timing, illustrations; all engine code; voice · render · thumbnails; `worklog` | picture and pacing; a deviation from the blueprint goes into the worklog; a new engine op is a feature document in the chain, not a patch inside the episode; does not change a spoken word, does not approve, does not publish |
+
 ## 3. The lifecycle
 
 The standard is built around one **question chain**, and a repository declares in its
@@ -96,6 +146,9 @@ same shape everywhere:
 > **Why → What → How → What happened.** Four questions, four documents, three-way
 > linked. A unit of work is done when all four have written answers; the index answers
 > the fifth — *where is everything, in what state?* — for every unit of work at once.
+
+A sixth question — *who owns what?* — is about the repository rather than a unit of
+work, and is answered by `## Roles` (§2.5), not by a document in the chain.
 
 The chain fixes the **Type** vocabulary of the lifecycle kinds:
 
@@ -355,6 +408,10 @@ agents that will otherwise confidently re-litigate or refactor away decisions.
 - `FLOCK.md` complements `AGENTS.md`; it does not replace it. A repo that keeps an
   instruction file for agents — `AGENTS.md`, `CLAUDE.md`, or a tool-specific
   equivalent — SHOULD reference `FLOCK.md` from it.
+- The agent instruction file is where roles (§2.5) are cast: which person, agent or
+  model plays each role, and under what rules. `FLOCK.md` names the roles; the
+  instruction file names who plays them, because that binding changes with every
+  model release and the standard does not.
 - In a repository that runs the lifecycle, an agent opening or advancing work SHOULD
   use the §3.4 transitions and the §3.2 templates rather than inventing structure.
 
@@ -388,6 +445,7 @@ must be survivable rather than fatal.
 | **The lifecycle** | the §3 kind vocabulary, linking rules, and a `## Lifecycle` section |
 | **Machine-writable work** *(opt-in)* | the §3.1 label block and a §3.3 index table; a §3.6 shipped ledger if the index is to have an exit |
 | **Evidence and review** *(opt-in, new in 0.5)* | `**Research:**` and `**Audit:**` labels on brd and feature documents, and a `research` row in the Docs Map |
+| **Who owns what** *(opt-in, new in 0.5)* | a `## Roles` section whose Owns column names Docs Map kinds |
 
 Everything not marked MUST is guidance: adopt what earns its keep.
 
