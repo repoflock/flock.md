@@ -77,6 +77,15 @@ changes nothing, and a 0.4 tool meeting the new labels ignores them (§3.1, §6)
   empty or identical across features. An Owner column would widen the only MUST in
   the standard (§2.1, three columns) to carry something SHOULD, and leave a
   one-person repository filling or blanking a cell on every row.
+- **Checker reads §2.5 and measures Target bareness** (`tools/check.mjs`). It prints
+  the number of roles and joins the Owns column to the Docs Map through backtick
+  spans shaped like a Type name, naming the ones with no Docs Map row as a note —
+  never a failure, since Owns legitimately holds code and gates, and the table
+  carries no MUST a tool could check. Next to the Target count it now prints the
+  number of distinct values and of values that are not bare (whitespace or a
+  bracket), which is what the §3.1 SHOULD is about. Measured why: a pass on the
+  video pilot took its Target values from 0/15 bare to 15/15 and from 8 strings to
+  5, and the checker printed `Target: 15` before and after.
 
 ## 0.4.0 — 2026-10-15
 

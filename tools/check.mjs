@@ -7,8 +7,8 @@
 //   node tools/check.mjs --self-test
 //
 // It reads what a tool can read (§1 declaration, §2.1 Docs Map, §2.2 Index,
-// §2.3 Status Labels, §3.1 label blocks, §3.3 index header, §3.5 round lists)
-// and prints the numbers. Only MUST violations fail the exit code — everything
+// §2.3 Status Labels, §2.5 Roles, §3.1 label blocks and Target bareness,
+// §3.3 index header, §3.5 round lists) and prints the numbers. Only MUST violations fail the exit code — everything
 // not marked MUST is guidance, and this checker holds itself to that line.
 //
 // Zero dependencies, Node 18+. Kept deliberately close to the spec text: each
@@ -134,11 +134,12 @@ function labelValue(text, label) {
   return undefined;
 }
 
-/** §3.5: checked / total under a heading named `Rounds` — any level, any case,
- *  closed by a same-or-higher heading; fenced code guards both task items and
- *  headings; items under subheadings inside the section still count. */
-function countRounds(text) {
-  let done = 0, total = 0, fence, level;
+/** Lines under every heading named `name` — any level, any case, closed by a
+ *  same-or-higher heading. Fenced code is skipped whole, so a heading inside a
+ *  fence opens nothing; subheadings inside the section are yielded, their
+ *  content still belongs to it. The anchor rule §3.5 states, reused by §2.5. */
+function* linesUnder(text, name) {
+  let fence, level;
   for (const line of text.split(/\r?\n/)) {
     const marker = /^ {0,3}(`{3,}|~{3,})/.exec(line);
     if (marker) {
@@ -151,10 +152,20 @@ function countRounds(text) {
     const heading = /^(#{1,6})\s+(.*?)\s*$/.exec(line);
     if (heading) {
       if (level !== undefined && heading[1].length <= level) level = undefined;
-      if (level === undefined && heading[2].replace(/\s*#+$/, '').trim().toLowerCase() === 'rounds') level = heading[1].length;
-      continue;
+      if (level === undefined) {
+        if (heading[2].replace(/\s*#+$/, '').trim().toLowerCase() === name) level = heading[1].length;
+        continue;
+      }
     }
-    if (level === undefined) continue;
+    if (level !== undefined) yield line;
+  }
+}
+
+/** §3.5: checked / total under a heading named `Rounds`; items under
+ *  subheadings inside the section still count. */
+function countRounds(text) {
+  let done = 0, total = 0;
+  for (const line of linesUnder(text, 'rounds')) {
     const task = /^\s*[-*+]\s+\[([ xX])\]\s/.exec(line);
     if (!task) continue;
     total++;
@@ -162,6 +173,36 @@ function countRounds(text) {
   }
   return total ? { done, total } : undefined;
 }
+
+/** §2.5 `## Roles`: the first table under the heading, `Role | Owns | Decides`.
+ *  Owns SHOULD name kinds by their Docs Map Type; a tool reads the backtick
+ *  spans shaped like a Type name (a word, no path or label punctuation) and
+ *  joins them to the Docs Map. Everything else in the cell — code, a gate, a
+ *  path, a label — is legal and is not a kind. Display only: §2.5 is MAY, and
+ *  a tool MUST NOT infer permissions from the table, so nothing here fails. */
+function readRoles(text) {
+  const block = [];
+  for (const line of linesUnder(text, 'roles')) {
+    if (line.trim().startsWith('|')) block.push(line);
+    else if (block.length) break;
+  }
+  const [header, ...rows] = rowsIn(block);
+  if (!header) return undefined;
+  const ownsAt = Math.max(1, header.findIndex(cell => cell.replace(/[*_`]/g, '').trim().toLowerCase() === 'owns'));
+  const roles = rows.filter(cells => cells[0]);
+  const owned = new Set();
+  for (const cells of roles) {
+    for (const [, span] of (cells[ownsAt] ?? '').matchAll(/`([^`\n]+)`/g)) {
+      if (/^[A-Za-z][\w-]*$/.test(span.trim())) owned.add(span.trim().toLowerCase());
+    }
+  }
+  return { count: roles.length, owned: [...owned] };
+}
+
+/** §3.1: a Target value SHOULD be the version or milestone alone — `1.2`,
+ *  `S3`, `chart-and-chance`. Whitespace or a bracket means a qualification is
+ *  glued on, and a tool grouping by the exact string gets one group per doc. */
+const isBareTarget = value => !/[\s()[\]{}]/.test(value);
 
 /** A label link resolved from the feature directory, kept inside the repo. */
 function resolveFrom(fromDir, raw) {
@@ -241,10 +282,20 @@ export function check(repo) {
   const vocab = readVocab(text);
   out.push(`Status labels (§2.3): ${vocab ? `${vocab.length} declared — ${vocab.join(' · ')}` : 'none declared'}`);
 
+  // §2.5 is MAY: no section prints nothing, and a section never fails (§6).
+  const roles = readRoles(text);
+  if (roles) {
+    const types = new Set(kinds.map(({ kind }) => kind));
+    const outside = roles.owned.filter(name => !types.has(name));
+    out.push(`Roles (§2.5): ${roles.count} declared · Owns naming a Docs Map Type: ${roles.owned.length - outside.length}${outside.length ? ` · not in the Docs Map: ${outside.length}` : ''}`);
+    if (outside.length) out.push(`  note: ${outside.join(' · ')} — Owns may hold what is not a document; a kind meant here wants a Docs Map row`);
+  }
+
   let names = [];
   try { names = readdirSync(join(repo, plan.feature)).filter(name => name.toLowerCase().endsWith('.md')).slice(0, 500); } catch { /* no feature dir — reported via counts */ }
   let withStatus = 0, matched = 0, withTarget = 0, withBlueprint = 0, withWorklog = 0, withRounds = 0, checked = 0, totalRounds = 0;
   let withResearch = 0, withAudit = 0;
+  const targets = [];
   for (const name of names) {
     const doc = read(join(repo, plan.feature, name));
     if (doc === undefined) continue;
@@ -252,7 +303,8 @@ export function check(repo) {
     const status = labelValue(doc, 'Status');
     if (status) withStatus++;
     if (status && vocab?.some(label => status.replace(/[*_`]/g, '').trim().toLowerCase().startsWith(label.toLowerCase()))) matched++;
-    if (labelValue(doc, 'Target')) withTarget++;
+    const target = labelValue(doc, 'Target');
+    if (target) { withTarget++; targets.push(target); }
     const blueprint = linkedDoc(repo, plan, 'blueprint', base, labelValue(doc, 'Blueprint'));
     if (blueprint) {
       withBlueprint++;
@@ -268,7 +320,10 @@ export function check(repo) {
   }
   out.push(`Feature documents (${plan.feature}): ${names.length}`);
   out.push(`  Status label (§3.1): ${withStatus}${vocab ? ` · matching the declared vocabulary: ${matched}` : ''}`);
-  out.push(`  Target: ${withTarget} · blueprint link resolving: ${withBlueprint} · worklog link resolving: ${withWorklog}`);
+  const notBare = targets.filter(value => !isBareTarget(value));
+  out.push(`  Target: ${withTarget}${withTarget ? ` · distinct values: ${new Set(targets).size} · not bare: ${notBare.length}` : ''}`);
+  if (notBare.length) out.push(`    note: §3.1 asks for the value alone — ${[...new Set(notBare)].slice(0, 5).map(value => JSON.stringify(value)).join(' · ')}${new Set(notBare).size > 5 ? ' · …' : ''}`);
+  out.push(`  Chain: blueprint link resolving: ${withBlueprint} · worklog link resolving: ${withWorklog}`);
   out.push(`  Research (§3.1): ${withResearch} · Audit: ${withAudit}`);
   out.push(`  Round lists (§3.5): ${withRounds}${withRounds ? ` — ${checked}/${totalRounds} checked overall` : ''}`);
 
@@ -337,8 +392,33 @@ function selfTest() {
   assert(f.must.length === 0, `fixture f: a fresh example copy with a seeded index must pass: ${JSON.stringify(f.must)}`);
   assert(has(f, 'Machine-writable header (§3.3): present'), 'fixture f: the seeded index header must be detected');
 
+  // 5. §2.5 Roles and §3.1 Target bareness. The section is found in any case,
+  //    only its first table is read, and a same-level heading closes it. Owns
+  //    joins to the Docs Map through Type-shaped backtick spans only — a path,
+  //    a label and unquoted words are not kinds. Target values qualified with a
+  //    space or a bracket are counted, never failed.
+  write('g/FLOCK.md', '# FLOCK.md\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n| blueprint | `docs/blueprint/` | How? |\n\n## roles\n\nWho owns what.\n\n| Role | Owns | Decides |\n|---|---|---|\n| architect | `feature` · `Blueprint` · the `**Audit:**` field | scope |\n| builder | code · `gizmo` · `docs/feature/` | nothing about scope |\n\n| Alias | Meaning |\n|---|---|\n| `x` | not a role |\n\n## Later\n\n| Role | Owns | Decides |\n|---|---|---|\n| ghost | `phantom` | — |\n');
+  const targets = ['1.2', '1.2', 'S3', '1.2 (moved from 1.1)', 'v2[rc]'];
+  targets.forEach((value, i) => write(`g/docs/feature/T${i}.md`, `# T${i}\n\n**Status:** Design\n**Target:** ${value}\n`));
+  const g = check(join(root, 'g'));
+  assert(g.must.length === 0, `fixture g: Roles and Target are never MUST: ${JSON.stringify(g.must)}`);
+  assert(has(g, 'Roles (§2.5): 2 declared · Owns naming a Docs Map Type: 2 · not in the Docs Map: 1'), `fixture g: §2.5 counts wrong: ${JSON.stringify(g.lines)}`);
+  assert(has(g, 'note: gizmo —') && !has(g, 'phantom'), `fixture g: only the unmatched kind of the first table is named: ${JSON.stringify(g.lines)}`);
+  assert(has(g, 'Target: 5 · distinct values: 4 · not bare: 2'), `fixture g: §3.1 Target bareness wrong: ${JSON.stringify(g.lines)}`);
+  assert(has(g, '"1.2 (moved from 1.1)" · "v2[rc]"'), `fixture g: the not-bare values must be named: ${JSON.stringify(g.lines)}`);
+
+  // 6. No Roles section prints nothing — absence is not an error (§6) — and a
+  //    `## Roles` inside fenced code opens no section. A bare Target only.
+  write('h/FLOCK.md', '# FLOCK.md\n\n## Docs Map\n\n| Type | Where | Answers |\n|---|---|---|\n| feature | `docs/feature/` | What? |\n\n```markdown\n## Roles\n\n| Role | Owns | Decides |\n|---|---|---|\n| owner | `feature` | all |\n```\n');
+  write('h/docs/feature/ONE.md', '# One\n\n**Target:** S3\n');
+  const h = check(join(root, 'h'));
+  assert(h.must.length === 0, `fixture h: ${JSON.stringify(h.must)}`);
+  assert(!h.lines.some(line => line.includes('Roles')), `fixture h: no Roles section must print no Roles line: ${JSON.stringify(h.lines)}`);
+  assert(has(h, 'Target: 1 · distinct values: 1 · not bare: 0') && !has(h, '§3.1 asks'), `fixture h: a bare Target gets no note: ${JSON.stringify(h.lines)}`);
+  assert(!has(a, 'Roles (§2.5)'), 'fixture a: the spec-shaped fixture has no Roles section and must print none');
+
   rmSync(root, { recursive: true, force: true });
-  if (process.exitCode !== 1) console.log('self-test: OK (6 fixtures)');
+  if (process.exitCode !== 1) console.log('self-test: OK (8 fixtures)');
 }
 
 // ── Entry ──────────────────────────────────────────────────────────────────
