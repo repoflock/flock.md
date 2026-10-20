@@ -23,7 +23,8 @@ unused. `research` sits outside the chain: a brd or feature cites it with
 
 - A feature doc links to its blueprint and worklog; both link back (three-way linking).
 - A feature doc is read against the rest of the repository before its blueprint is
-  written, and says so in `**Audit:**` (spec §3.1) — delete this line if not in play.
+  written, and says so in `**Audit:**` — `not yet` until it has been (spec §3.1).
+  Delete this line if not in play.
 - A blueprint describes the code as measured, in rounds (`B1`, `B2`, …) that stand alone.
 - A worklog block is appended when a round closes.
 - Naming: one topic per file, same base name across the three kinds.

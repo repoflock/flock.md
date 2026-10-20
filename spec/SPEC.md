@@ -238,10 +238,12 @@ tool SHOULD NOT resolve the links as if they were chain links.
 
 The `**Audit:**` value SHOULD name who read the document, the date, and the scope
 read or the commit it was read at — `Reviewer 2026-10-14 — whole document, 3 fixes in
-place` — or a value from the repository's own vocabulary meaning *not yet*. A document
-written by a reviewer the repository's agent instruction file names MAY count its own
-writing as the audit, citing the commit. A tool reads the label to tell audited from unaudited;
-it MUST NOT judge the value beyond that.
+place` — or a value from the repository's own vocabulary meaning *not yet*. A
+repository that uses the label SHOULD name that word in its `## Lifecycle` section
+(the templates say `not yet`), so a tool offering Advance (§3.4) can tell without
+asking. A document written by a reviewer the repository's agent instruction file names
+MAY count its own writing as the audit, citing the commit. A tool reads the label to
+tell audited from unaudited; it MUST NOT judge the value beyond that.
 
 A document MAY carry additional labels. A tool MUST ignore labels it does not recognize,
 and MUST NOT remove them.

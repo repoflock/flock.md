@@ -29,8 +29,8 @@ changes nothing, and a 0.4 tool meeting the new labels ignores them (§3.1, §6)
   cites, not a question before it.
 - **`**Audit:**` label** (§3.1) on brd and feature: who read the document against
   the rest of the repository, when, and how far — or the repository's own word for
-  *not yet*. A tool offering Advance SHOULD decline or ask while the value means not
-  yet (§3.4). The first label about *who*; what it catches is the contradiction
+  *not yet*, named in `## Lifecycle` so a tool can read it. A tool offering Advance
+  SHOULD decline or ask while the value means not yet (§3.4). The first label about *who*; what it catches is the contradiction
   between this document and a decision recorded in another, which is the mistake
   that otherwise surfaces three rounds later under tests and schemas. Rejected with
   it: `**Author:**` or `**Model:**` labels — the commit trailer already records who

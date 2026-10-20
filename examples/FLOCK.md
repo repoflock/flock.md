@@ -25,7 +25,7 @@ research it rests on with `**Research:**`; the link is one-way.
 
 - A feature doc links to its blueprint and worklog; both link back (three-way linking).
 - A feature doc is read against the rest of the repository before its blueprint is
-  written, and says so in `**Audit:**`
+  written, and says so in `**Audit:**` — `not yet` until it has been
   ([spec §3.1](https://github.com/repoflock/flock.md/blob/main/spec/SPEC.md#31-document-label-block-new-in-02)).
 - A blueprint describes the code as measured, in rounds (`B1`, `B2`, …) that stand alone.
 - A worklog block is appended when a round closes: what was done, deviations from the

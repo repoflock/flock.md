@@ -2,9 +2,11 @@
 
 > One file that tells humans **and** AI agents where a repo's knowledge lives — and how work flows through it.
 
-**Status: v0.4 — draft.** The spec is small on purpose and still settling. v0.4 gives
-the index an exit — finished rows leave for a shipped ledger when their version is
-released — and drops the core/flow profiles: one template, one shape, declare what is
+**Status: v0.5 — draft.** The spec is small on purpose and still settling. v0.5 adds
+evidence and review — a `research` kind outside the chain, `Research:` and `Audit:`
+labels, a Target that may be a sprint, and an optional `## Roles` table; v0.4 gave the
+index an exit — finished rows leave for a shipped ledger when their version is
+released — and dropped the core/flow profiles: one template, one shape, declare what is
 in play; v0.3 named the question chain — **Why → What → How → What happened** — that
 the standard has always encoded; v0.2 added document templates and an opt-in
 machine-writable index — tool-friendly, never tool-required. Feedback is welcome via
@@ -453,7 +455,7 @@ node tools/check.mjs <path-to-repo>
 ```
 
 It prints what a tool can read from the adoption — kinds declared, labels parsed,
-where the index resolves, §3.5 round counts — and fails only on MUST violations;
+where the index resolves, §3.5 round counts, §2.5 roles — and fails only on MUST violations;
 everything else the spec leaves as guidance, and the checker holds itself to that
 line. `--self-test` runs it against the shapes real adoptions have taught it.
 
